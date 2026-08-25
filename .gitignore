@@ -1,0 +1,13 @@
+node_modules
+.next
+next-env.d.ts
+*.tsbuildinfo
+
+# Рабочие снимки экрана и кэш инструмента проверки дизайна: это следы работы,
+# а не проект. Разбор решений раздела лежит в .impeccable/surfaces и остаётся.
+.impeccable/*.png
+.impeccable/hook.cache.json
+.impeccable/*.before-copy.ts
+.impeccable/*.backup.ts
+.impeccable/check-content.mjs
+.impeccable/server.log
