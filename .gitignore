@@ -11,3 +11,14 @@ next-env.d.ts
 .impeccable/*.backup.ts
 .impeccable/check-content.mjs
 .impeccable/server.log
+
+# Материалы клиента и исследование: в публичном репозитории им не место.
+# Локально остаются на диске и продолжают работать.
+CLAUDE.md
+checklist.txt
+Бриф*.docx
+Структура GLASS.txt
+image.png
+image-1.png
+image-2.png
+references/
