@@ -103,7 +103,7 @@ export function CartView({ lang }: { lang: Locale }) {
         <h1 className="t-h2">{t.cart.title}</h1>
         {undoStrip}
         <p className="t-lead t-muted mt-6">{t.cart.empty}</p>
-        <Link href={`/${lang}/catalog`} className="btn mt-8">
+        <Link href={`/${lang}/catalog`} className="btn btn-wide mt-8">
           {t.cart.toShop}
         </Link>
       </section>

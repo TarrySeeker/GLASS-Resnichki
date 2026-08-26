@@ -336,10 +336,12 @@ export function CatalogView({ lang }: { lang: Locale }) {
             задаётся order, а не перестановкой в разметке, — иначе тот же
             блок пришлось бы писать дважды. */}
         <div className="wrap flex flex-col gap-2 py-2 sm:flex-row sm:items-center sm:gap-x-6 sm:py-3">
-          <div className="flex items-center gap-3 sm:contents">
-            {/* Поиск и число найденного стоят рядом: на телефоне это одна
-                строка «что ищу — сколько нашлось», и вторая строка остаётся
-                под управление. */}
+          <div className="sm:contents">
+            {/* Поиск занимает всю первую строку: подсказка «название, длина,
+                изгиб» длиннее половины экрана, и рядом с ней обрезалось
+                и поле, и то, что стояло справа. Число найденного
+                уехало во вторую строку, к фильтру и сортировке — там оно и
+                читается как итог их работы. */}
             <div className="relative order-1 min-w-0 flex-1 sm:max-w-sm sm:flex-none sm:basis-64">
               <label className="block">
                 <span className="sr-only">{t.nav.search}</span>
@@ -372,19 +374,12 @@ export function CatalogView({ lang }: { lang: Locale }) {
               ) : null}
             </div>
 
-            <p
-              className="t-label order-4 ms-auto shrink-0 tabular-nums"
-              aria-live="polite"
-              aria-busy={pending}
-            >
-              {pending ? `${t.nav.search}…` : plural(found.length, lang, t.catalog.items)}
-            </p>
           </div>
 
-          <div className="flex items-center gap-3 sm:contents">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 sm:contents">
             <button
               type="button"
-              className="t-nav tap order-2 shrink-0 border border-[var(--color-ink)] px-4"
+              className="t-nav tap order-2 shrink-0 border border-[var(--color-ink)] px-3 sm:px-4"
               onClick={() => sheet.current?.showModal()}
             >
               {t.catalog.filters}
@@ -405,6 +400,14 @@ export function CatalogView({ lang }: { lang: Locale }) {
                 ]}
               />
             </div>
+
+            <p
+              className="t-label order-4 ms-auto shrink-0 tabular-nums"
+              aria-live="polite"
+              aria-busy={pending}
+            >
+              {pending ? `${t.nav.search}…` : plural(found.length, lang, t.catalog.items)}
+            </p>
           </div>
         </div>
 

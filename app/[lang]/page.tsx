@@ -67,17 +67,29 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
           <div className="wrap">
             <div className="flex flex-wrap items-baseline justify-between gap-6">
               <h2 className="t-h2">{t.home.bestTitle}</h2>
-              <Link href={`/${lang}/catalog`} className="lnk t-label">
+              {/* На телефоне вход в каталог стоит под лентой полосой во всю
+                  ширину — тот же адрес дважды в одном экране читается как две
+                  разные цели, поэтому здесь ссылка прячется. */}
+              <Link href={`/${lang}/catalog`} className="lnk t-label max-sm:hidden">
                 {t.home.all}
               </Link>
             </div>
-            <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 lg:grid-cols-4">
+            {/* На телефоне витрина едет лентой, а не встаёт столбиком: восемь
+                карточек в две колонки — это 880 px и четыре ряда, которые
+                приходится пролистывать целиком, чтобы дойти до следующего
+                блока. Лентой ряд занимает одну карточку по высоте, а вход в
+                весь каталог стоит под ним отдельной целью. */}
+            <div className="mrail rail-cards mt-8 sm:grid sm:grid-cols-3 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-4">
               {best.map((p) => (
                 <div key={p.id}>
                   <ProductCard product={p} lang={lang} />
                 </div>
               ))}
             </div>
+
+            <Link href={`/${lang}/catalog`} className="rail-more t-nav lg:hidden">
+              {t.home.all}
+            </Link>
           </div>
         </section>
 

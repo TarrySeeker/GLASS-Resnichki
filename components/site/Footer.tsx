@@ -102,7 +102,7 @@ export function Footer({ lang }: { lang: Locale }) {
         </div>
 
         {/* ─── Колонки ─────────────────────────────────────────────────── */}
-        <div className="wrap grid gap-x-8 gap-y-8 py-10 sm:grid-cols-2 lg:grid-cols-12 lg:gap-x-[var(--col-gap)] lg:gap-y-10 lg:py-14">
+        <div className="wrap grid gap-x-8 gap-y-8 py-10 max-sm:gap-y-0 sm:grid-cols-2 lg:grid-cols-12 lg:gap-x-[var(--col-gap)] lg:gap-y-10 lg:py-14">
           <div className="min-w-0 lg:col-span-3">
             <p className="t-h2">{BRAND}</p>
             <p className="t-label t-muted pt-1">{BRAND_SUB}</p>
@@ -114,23 +114,36 @@ export function Footer({ lang }: { lang: Locale }) {
 
           {cols.map((col) => (
             <nav key={col.title} className="min-w-0 lg:col-span-3" aria-label={col.title}>
-              <p className="t-label t-muted">{col.title}</p>
-              <ul className="pt-2">
-                {col.items.map((i) => (
-                  <li key={i.label}>
-                    <Link href={i.href} className="lnk tap t-nav">
-                      {i.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+              {/* На телефоне колонка сворачивается. Двенадцать ссылок в столбик
+                  давали 1332 px футера — полтора экрана прокрутки мимо того,
+                  что почти никому не нужно. Свёрнутые группы дают три строки,
+                  а нужную открывают одним касанием.
+
+                  С 1024 раскрытие отменяется правилом .fold: содержимое
+                  показывается всегда, стрелка убирается, и колонка выглядит
+                  ровно как раньше. Разметка одна на оба случая. */}
+              <details className="fold">
+                <summary className="t-label t-muted">{col.title}</summary>
+                <ul className="pt-2">
+                  {col.items.map((i) => (
+                    <li key={i.label}>
+                      <Link href={i.href} className="lnk tap t-nav">
+                        {i.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </details>
             </nav>
           ))}
 
           {/* Соцсети текстом, а не значком: во всём футере нет ни одной
               иконки, и логотип чужой площадки читался бы заплаткой. */}
-          <nav className="min-w-0 lg:col-span-3" aria-label={t.footer.social}>
-            <p className="t-label t-muted">{t.footer.social}</p>
+          <nav
+            className="min-w-0 max-sm:border-t max-sm:border-[var(--color-rule-ink)] max-sm:pt-4 lg:col-span-3"
+            aria-label={t.footer.social}
+          >
+            <p className="t-label t-muted lg:pt-0">{t.footer.social}</p>
             <ul className="pt-2">
               {SOCIAL.map((s) => (
                 <li key={s.name}>

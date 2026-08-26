@@ -242,6 +242,23 @@ body {
   padding-block: clamp(5rem, 13vh, 9rem);
 }
 
+/* Ритм на телефоне свой. Воздух между блоками задан долей высоты экрана, и на
+   844 это 135 px у обычной секции и 220 у высокой. На четырнадцати секциях
+   главной выходит 1890 px пустоты — пятая часть всей страницы, которую
+   приходится пролистывать. На широком экране такой воздух работает, потому
+   что блок виден целиком; на узком он только отодвигает следующий.
+
+   Здесь доля меньше, а не значение: пропорция между обычной и высокой
+   секцией сохраняется. */
+@media (max-width: 639px) {
+  .sec {
+    padding-block: 2.75rem;
+  }
+  .sec-tall {
+    padding-block: 4rem;
+  }
+}
+
 .hr {
   border: 0;
   border-top: 1px solid var(--color-rule);
@@ -863,11 +880,14 @@ a:hover .tile > img,
 .rail {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: 78%;
+  grid-auto-columns: var(--rail-card, 78%);
   gap: 1rem;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   padding-inline: var(--gutter);
+  /* Иначе прилипание считает от края области прокрутки и съедает поле:
+     лента открывалась уже сдвинутой на ширину поля, с обрезанным кадром. */
+  scroll-padding-inline: var(--gutter);
   scrollbar-width: none;
 }
 .rail::-webkit-scrollbar {
@@ -1031,6 +1051,16 @@ html:has(dialog[open]) {
 
    Контент виден по умолчанию; приём включается, только если JS подтвердил
    поддержку. Без JS и при выключенной анимации страница просто читается. */
+
+/* Шторки кладутся в сам элемент, поэтому он обязан быть точкой отсчёта.
+   Без этой строки абсолютная шторка искала ближайшего позиционированного
+   предка и не находила: у заголовка «Смотрите также» она разворачивалась от
+   начала документа на половину его высоты и закрывала бумагой всю карточку
+   товара — разметка на месте, кликается, но не видно ничего. У плиток
+   position уже стоит от .tile, и повторение ничего не меняет. */
+.js .rise {
+  position: relative;
+}
 
 .js .rise::before,
 .js .rise::after {
@@ -1340,5 +1370,167 @@ dialog[open]::backdrop {
 @media (prefers-reduced-motion: reduce) {
   dialog.sheet {
     translate: 0 0;
+  }
+}
+
+
+/* ─── Мобильная витрина ───────────────────────────────────────────────────
+   Проработана отдельно, а не сжатием десктопа. Правило одно: на телефоне ряд
+   карточек становится лентой, а не столбиком. Четыре плитки образов в две
+   строки занимали 1428 px и ломали подписи по слогам; лентой они занимают
+   одну строку, каждая вдвое шире, и подписи встают в строку.
+
+   Сколько карточек видно, задаёт --rail-card: 60% — две с половиной,
+   66% — полторы. Обрезанная у края следующая карточка и есть единственный
+   честный признак, что лента едет дальше.                                  */
+
+/* Лента только на телефоне. Отдельный класс, а не .rail: у той есть свои
+   правила с 1024 и с 1400, и они перебили бы сетку, заданную утилитами.
+   Здесь выше 640 не остаётся ничего — раскладку целиком берут утилиты,
+   и планшет получает обычную сетку, а не ленту в половину экрана. */
+@media (max-width: 639px) {
+  .mrail {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: var(--rail-card, 66%);
+    gap: 1rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    /* Лента упирается в края экрана, а не в колонку: обрезанная у края
+       следующая карточка — единственный честный признак продолжения. */
+    margin-inline: calc(-1 * var(--gutter));
+    width: 100vw;
+    max-width: none;
+    padding-inline: var(--gutter);
+    /* Прилипание считает от края области прокрутки, а не от края поля: без
+       этой строки браузер сам уезжал на 27 px вправо, чтобы совместить первую
+       карточку с нулём, и левое поле съедалось — лента открывалась с обрезанным
+       кадром, будто её уже листали. */
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
+  }
+
+  .mrail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mrail > * {
+    scroll-snap-align: start;
+  }
+
+  /* Колонки футера на телефоне — гармошка, и читаются они как гармошка:
+     строки идут вплотную, разделённые линией. Свободные 32 px между ними
+     превращали три заголовка в три плавающих обрывка. */
+  footer .fold {
+    border-top: 1px solid var(--color-rule-ink);
+    padding-block: 0.5rem;
+  }
+}
+
+.rail-looks {
+  --rail-card: 66%;
+}
+
+.rail-cards {
+  --rail-card: 60%;
+}
+
+/* «Смотреть всё» под лентой. На широком экране ряд виден целиком и такая
+   кнопка не нужна — там мелкая ссылка у заголовка. На узком видна треть
+   ряда, и без кнопки остальное приходится искать пальцем вбок. */
+.rail-more {
+  display: block;
+  width: calc(100% - 2 * var(--gutter));
+  margin: 1.5rem var(--gutter) 0;
+  padding-block: 0.875rem;
+  border: 1px solid currentColor;
+  text-align: center;
+}
+
+@media (min-width: 1024px) {
+  .rail-more {
+    display: none;
+  }
+}
+
+/* Кнопка блока на телефоне тянется во всю ширину: на 390 кнопка по ширине
+   надписи оставляет половину строки пустой, а палец целит в неё же. */
+@media (max-width: 639px) {
+  .btn-wide {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Быстрая покупка с карточки. На устройстве без наведения она показывалась
+   всегда и закрывала нижнюю треть каждого снимка — а снимок здесь и есть
+   товар. На телефоне её нет: карточка ведёт в товар, где стоит липкая полоса
+   покупки. Один тап вместо потерянной фотографии. */
+@media (hover: none) {
+  .quick {
+    display: none;
+  }
+}
+
+
+/* ─── Сворачиваемая группа футера ─────────────────────────────────────────
+   Тот же <details>, что и в карточке товара, но со своим маркером: в футере
+   стрелка вниз, а не плюс, — здесь сворачивается список ссылок, а не текст.
+
+   Выше 1024 раскрытие отменяется: содержимое показывается независимо от
+   состояния, маркер убирается, заголовок перестаёт быть кнопкой. Разметка
+   при этом одна, и на десктопе колонка выглядит ровно как прежде.          */
+.fold > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 44px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.fold > summary::-webkit-details-marker {
+  display: none;
+}
+
+.fold > summary::after {
+  content: '';
+  inline-size: 0.5rem;
+  block-size: 0.5rem;
+  flex: none;
+  border-inline-end: 1px solid currentColor;
+  border-block-end: 1px solid currentColor;
+  rotate: 45deg;
+  translate: 0 -0.15em;
+  transition: rotate var(--dur-fast) var(--ease-brand);
+}
+
+.fold[open] > summary::after {
+  rotate: -135deg;
+  translate: 0 0.1em;
+}
+
+.fold > summary:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+
+@media (min-width: 1024px) {
+  .fold > summary {
+    min-height: 0;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .fold > summary::after {
+    display: none;
+  }
+
+  /* Содержимое видно всегда: атрибут open на десктопе не нужен и не ставится. */
+  .fold > summary + * {
+    display: block;
   }
 }

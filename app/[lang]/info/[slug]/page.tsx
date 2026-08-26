@@ -94,7 +94,7 @@ export default async function InfoPage({
 
                 {slug === 'contacts' ? <ContactList lang={lang} /> : null}
 
-                <Link href={`/${lang}/catalog`} className="btn mt-10">
+                <Link href={`/${lang}/catalog`} className="btn btn-wide mt-10">
                   {t.cart.toShop}
                 </Link>
               </div>

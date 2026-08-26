@@ -35,7 +35,7 @@ export function AddToCart({
       <div className="mt-6 flex flex-wrap items-center gap-4">
         <button
           type="button"
-          className="btn"
+          className="btn btn-wide"
           disabled={!variant.inStock}
           onClick={() => {
             add(product.id, variant.sku)

@@ -39,7 +39,7 @@ export function KitButton({ lang }: { lang: Locale }) {
 
   if (collected) {
     return (
-      <Link href={`/${lang}/cart`} className="btn">
+      <Link href={`/${lang}/cart`} className="btn btn-wide">
         {t.blocks.kitDone}
       </Link>
     )
@@ -48,7 +48,7 @@ export function KitButton({ lang }: { lang: Locale }) {
   return (
     <button
       type="button"
-      className="btn"
+      className="btn btn-wide"
       onClick={() => {
         for (const p of inStock) {
           const v = p.variants.find((x) => x.inStock)

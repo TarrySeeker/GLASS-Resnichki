@@ -75,7 +75,7 @@ export function Hero({ lang }: { lang: Locale }) {
           <p className="t-lead t-muted mt-6 lg:mt-10">{t.home.heroNote}</p>
           {/* Действие ведёт не в каталог, а в блок образов ниже: там
               покупательница выбирает эффект, а не перебирает артикулы. */}
-          <a href="#looks" className="btn mt-6 self-start lg:mt-8 whitespace-nowrap">
+          <a href="#looks" className="btn btn-wide mt-6 self-start lg:mt-8 whitespace-nowrap">
             {t.home.heroCta}
           </a>
         </div>

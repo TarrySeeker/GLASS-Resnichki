@@ -104,7 +104,11 @@ export function LooksBlock({ lang }: { lang: Locale }) {
       <div className="wrap">
         <h2 className="t-h2">{t.blocks.looksTitle}</h2>
 
-        <ul className="mt-10 grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 lg:grid-cols-4">
+        {/* На телефоне это лента: четыре плитки в две строки занимали 1428 px
+            и ломали подписи по слогам — «мягкий, / незаметный». Лентой они
+            встают в одну строку, каждая вдвое шире, подписи не переносятся.
+            С 1024 лента разворачивается в прежний ряд из четырёх. */}
+        <ul className="mrail rail-looks mt-10 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-8 lg:grid-cols-4">
           {t.blocks.looks.map((look, i) => {
             const source = LOOKS[i]
             if (!source) return null
@@ -133,6 +137,12 @@ export function LooksBlock({ lang }: { lang: Locale }) {
             )
           })}
         </ul>
+
+        {/* Под лентой — вход во весь раздел: на узком экране виден полтора
+            образа из четырёх, и без этой кнопки остальные надо искать вбок. */}
+        <Link href={`/${lang}/catalog?category=lashes`} className="rail-more t-nav lg:hidden">
+          {t.home.all}
+        </Link>
 
         <LashFinder lang={lang} />
       </div>
@@ -170,7 +180,15 @@ export function RealLifeBlock({ lang }: { lang: Locale }) {
         {/* Три шага из четырёх — съёмка бренда, а не заглушки: палетка в
             свете, нанесение крупным планом и готовый образ. Пустым остался
             один кадр: макро самих пучков в архиве нет. */}
-        <ol className="mt-10 grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+        {/* Лента фокусируема: внутри карточек нет ссылок, и без tabindex с
+            клавиатуры её нечем прокрутить — видны были бы две карточки из
+            четырёх. Имя берём у заголовка блока, чтобы остановка в обходе
+            объявлялась осмысленно. */}
+        <ol
+          tabIndex={0}
+          aria-label={t.blocks.realTitle}
+          className="mrail rail-cards mt-10 sm:grid sm:grid-cols-2 sm:gap-6 lg:grid-cols-4"
+        >
           {t.blocks.realSteps.map((step, i) => {
             const clip = CLIPS[i]
             return (
@@ -446,7 +464,14 @@ export function StepsBlock({ lang }: { lang: Locale }) {
           <KitButton lang={lang} />
         </div>
 
-        <ol className="mt-12 grid gap-10 sm:grid-cols-3 sm:gap-8">
+        {/* Три шага на телефоне идут лентой: столбиком они занимали 907 px,
+            хотя это одна короткая мысль из трёх частей — её читают подряд, а
+            не изучают по очереди, прокручивая экран. */}
+        <ol
+          tabIndex={0}
+          aria-label={t.blocks.stepsTitle}
+          className="mrail rail-looks mt-10 sm:mt-12 sm:grid sm:grid-cols-3 sm:gap-8"
+        >
           {t.blocks.steps.map((s, i) => (
             <li key={s.title} className="border-t border-[var(--color-rule-ink)] pt-6">
               <p className="t-hero" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)' }}>
@@ -512,7 +537,7 @@ export function FinalBlock({ lang }: { lang: Locale }) {
           <br />
           {l2}
         </p>
-        <Link href={`/${lang}/catalog`} className="btn mt-10">
+        <Link href={`/${lang}/catalog`} className="btn btn-wide mt-10">
           {t.blocks.finalCta}
         </Link>
       </div>

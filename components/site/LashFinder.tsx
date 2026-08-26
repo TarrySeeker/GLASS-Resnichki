@@ -1,10 +1,10 @@
-'use client'
+"use client";
 
-import { useMemo, useState } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
-import { CONTENT } from '@/lib/content'
-import { formatLength, type Locale } from '@/lib/i18n'
-import { PRODUCTS } from '@/lib/catalog'
+import { useMemo, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { CONTENT } from "@/lib/content";
+import { formatLength, type Locale } from "@/lib/i18n";
+import { PRODUCTS } from "@/lib/catalog";
 
 /**
  * Подбор по длине и изгибу.
@@ -25,20 +25,26 @@ import { PRODUCTS } from '@/lib/catalog'
  * набранный контекст ради перезагрузки.
  */
 const uniq = (xs: string[]) =>
-  [...new Set(xs)].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
+  [...new Set(xs)].sort((a, b) =>
+    a.localeCompare(b, undefined, { numeric: true }),
+  );
 
-const LASHES = PRODUCTS.filter((p) => p.category === 'lashes')
-const LENGTHS = uniq(LASHES.flatMap((p) => p.variants.map((v) => v.length))).filter((l) => l !== '—')
-const CURLS = uniq(LASHES.flatMap((p) => p.variants.map((v) => v.curl))).filter((c) => c !== '—')
+const LASHES = PRODUCTS.filter((p) => p.category === "lashes");
+const LENGTHS = uniq(
+  LASHES.flatMap((p) => p.variants.map((v) => v.length)),
+).filter((l) => l !== "—");
+const CURLS = uniq(LASHES.flatMap((p) => p.variants.map((v) => v.curl))).filter(
+  (c) => c !== "—",
+);
 
 export function LashFinder({
   lang,
-  mode = 'link',
+  mode = "link",
   standalone = false,
 }: {
-  lang: Locale
+  lang: Locale;
   /** 'link' — уйти в каталог, 'apply' — проставить фильтр на этой же странице. */
-  mode?: 'link' | 'apply'
+  mode?: "link" | "apply";
   /**
    * Отдельный блок страницы, а не хвост чужого.
    *
@@ -47,16 +53,18 @@ export function LashFinder({
    * отступом там оказались бы второй границей поверх границы секции, а
    * заголовок третьего уровня — вне иерархии страницы.
    */
-  standalone?: boolean
+  standalone?: boolean;
 }) {
-  const t = CONTENT[lang]
-  const router = useRouter()
-  const pathname = usePathname()
-  const [lengths, setLengths] = useState<string[]>([])
-  const [curls, setCurls] = useState<string[]>([])
+  const t = CONTENT[lang];
+  const router = useRouter();
+  const pathname = usePathname();
+  const [lengths, setLengths] = useState<string[]>([]);
+  const [curls, setCurls] = useState<string[]>([]);
 
   const toggle = (value: string, list: string[], set: (v: string[]) => void) =>
-    set(list.includes(value) ? list.filter((v) => v !== value) : [...list, value])
+    set(
+      list.includes(value) ? list.filter((v) => v !== value) : [...list, value],
+    );
 
   const found = useMemo(
     () =>
@@ -68,93 +76,117 @@ export function LashFinder({
         ),
       ).length,
     [lengths, curls],
-  )
+  );
 
   const open = () => {
-    const q = new URLSearchParams({ category: 'lashes' })
-    if (lengths.length) q.set('length', lengths.join(','))
-    if (curls.length) q.set('curl', curls.join(','))
+    const q = new URLSearchParams({ category: "lashes" });
+    if (lengths.length) q.set("length", lengths.join(","));
+    if (curls.length) q.set("curl", curls.join(","));
 
-    if (mode === 'link') {
-      router.push(`/${lang}/catalog?${q}`)
-      return
+    if (mode === "link") {
+      router.push(`/${lang}/catalog?${q}`);
+      return;
     }
 
     /* Замена, а не новая запись в истории: подбор — это уточнение текущего
        экрана, и кнопка «назад» должна вернуть на страницу до каталога, а не
        отматывать по одному нажатию на чип. */
-    router.replace(`${pathname}?${q}`, { scroll: false })
-    document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
+    router.replace(`${pathname}?${q}`, { scroll: false });
+    document
+      .getElementById("catalog")
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const dirty = lengths.length > 0 || curls.length > 0;
 
   return (
-    <div className={standalone ? '' : 'finder'}>
-      <div className="flex flex-wrap items-baseline justify-between gap-4">
+    /* На телефоне подбор свёрнут. Девять длин и три изгиба чипами занимают
+       507 px — больше, чем сама лента образов над ними, и это инструмент для
+       того, кто уже знает свои миллиметры. Свёрнутый, он стоит одной строкой
+       и открывается касанием; выше 1024 правило .fold отменяет сворачивание,
+       и блок выглядит ровно как раньше. */
+    <details className={`fold ${standalone ? "" : "finder"}`}>
+      <summary className="flex flex-wrap items-baseline gap-4">
         {standalone ? (
           <h2 className="t-h2">{t.blocks.finderExact}</h2>
         ) : (
           <h3 className="t-h3">{t.blocks.finderTitle}</h3>
         )}
-        {lengths.length || curls.length ? (
+        {/* Счётчик выбранного виден и в свёрнутом виде: иначе непонятно, что
+            внутри что-то отмечено. */}
+        {dirty ? (
+          <span className="t-label t-muted tabular-nums">
+            {lengths.length + curls.length}
+          </span>
+        ) : null}
+      </summary>
+
+      <div className="pt-2">
+        {dirty ? (
           <button
             type="button"
             className="lnk tap t-label"
             onClick={() => {
-              setLengths([])
-              setCurls([])
+              setLengths([]);
+              setCurls([]);
             }}
           >
             {t.catalog.reset}
           </button>
         ) : null}
-      </div>
 
-      <div className="mt-8 grid gap-8 lg:grid-cols-12 lg:gap-[var(--col-gap)]">
-        <fieldset className="border-0 p-0 lg:col-span-7">
-          <legend className="t-label t-muted">{t.catalog.length}</legend>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {LENGTHS.map((l) => (
-              <button
-                key={l}
-                type="button"
-                className="chip"
-                aria-pressed={lengths.includes(l)}
-                onClick={() => toggle(l, lengths, setLengths)}
-              >
-                {formatLength(l, lang)}
-              </button>
-            ))}
-          </div>
-        </fieldset>
+        <div className="mt-8 grid gap-8 lg:grid-cols-12 lg:gap-[var(--col-gap)]">
+          <fieldset className="border-0 p-0 lg:col-span-7">
+            <legend className="t-label t-muted">{t.catalog.length}</legend>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {LENGTHS.map((l) => (
+                <button
+                  key={l}
+                  type="button"
+                  className="chip"
+                  aria-pressed={lengths.includes(l)}
+                  onClick={() => toggle(l, lengths, setLengths)}
+                >
+                  {formatLength(l, lang)}
+                </button>
+              ))}
+            </div>
+          </fieldset>
 
-        <fieldset className="border-0 p-0 lg:col-span-4 lg:col-start-9">
-          <legend className="t-label t-muted">{t.catalog.curl}</legend>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {CURLS.map((c) => (
-              <button
-                key={c}
-                type="button"
-                className="chip"
-                aria-pressed={curls.includes(c)}
-                onClick={() => toggle(c, curls, setCurls)}
-              >
-                {c}
-              </button>
-            ))}
-          </div>
-        </fieldset>
-      </div>
+          <fieldset className="border-0 p-0 lg:col-span-4 lg:col-start-9">
+            <legend className="t-label t-muted">{t.catalog.curl}</legend>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {CURLS.map((c) => (
+                <button
+                  key={c}
+                  type="button"
+                  className="chip"
+                  aria-pressed={curls.includes(c)}
+                  onClick={() => toggle(c, curls, setCurls)}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
+          </fieldset>
+        </div>
 
-      <div className="mt-8 flex flex-wrap items-center gap-6">
-        <button type="button" className="btn" onClick={open} disabled={found === 0}>
-          {t.catalog.apply}
-        </button>
-        {/* Число живёт рядом с действием и объявляется вслух: иначе нажатие
+        <div className="mt-8 flex flex-wrap items-center gap-6">
+          <button
+            type="button"
+            className="btn btn-wide"
+            onClick={open}
+            disabled={found === 0}
+          >
+            {t.catalog.apply}
+          </button>
+          {/* Число живёт рядом с действием и объявляется вслух: иначе нажатие
             на чип на монохромной витрине почти ничего не меняет визуально. */}
-        <p className="t-label t-muted" aria-live="polite">
-          {t.catalog.found} {found}
-        </p>
+          <p className="t-label t-muted" aria-live="polite">
+            {t.catalog.found} {found}
+          </p>
+        </div>
       </div>
-    </div>
-  )
+    </details>
+  );
 }

@@ -74,7 +74,7 @@ export function Subscribe({ lang, labelledBy }: { lang: Locale; labelledBy: stri
         {/* Гасится только на время отправки. Кнопка, погашенная из-за пустого
             поля, встречает человека серым прямоугольником и читается
             сломанной; пустой адрес и так не пройдёт — поле обязательное. */}
-        <button type="submit" className="btn shrink-0 px-5" disabled={state === 'sending'}>
+        <button type="submit" className="btn btn-wide shrink-0 px-5" disabled={state === 'sending'}>
           {t.footer.subscribeCta}
         </button>
       </div>
