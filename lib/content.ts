@@ -362,10 +362,11 @@ const ru: Dict = {
     },
     delivery: {
       title: 'Доставка и оплата',
-      lead: 'По России — СДЭК. По миру — почтой.',
+      lead: 'По России и СНГ — СДЭК. В остальные страны — Почта России.',
       body: [
-        'По России посылку везёт СДЭК: до двери или до пункта выдачи. Стоимость считается на оформлении заказа по адресу.',
-        'В другие страны заказ уходит Почтой России. Сроки зависят от страны назначения.',
+        'По России и странам СНГ посылку везёт СДЭК: до двери или до пункта выдачи. Стоимость считается на оформлении заказа по адресу.',
+        'СНГ здесь — это Беларусь, Казахстан, Азербайджан, Армения, Кыргызстан, Узбекистан и Таджикистан.',
+        'В Турцию, Испанию и ОАЭ заказ уходит Почтой России. Пункта выдачи там нет — только доставка по адресу, и сроки зависят от страны назначения.',
         `Способы оплаты и порог бесплатной доставки: ${BLANKS.data}`,
       ],
     },
@@ -515,8 +516,8 @@ const ru: Dict = {
     subscribeOff: 'Рассылка ещё не подключена.',
   },
   promise: {
-    shipping: 'СДЭК по России',
-    worldwide: 'Почтой по миру',
+    shipping: 'СДЭК по России и СНГ',
+    worldwide: 'Почтой в остальные страны',
     cost: 'Стоимость — на оформлении',
   },
 }
@@ -627,10 +628,11 @@ const en: Dict = {
     },
     delivery: {
       title: 'Shipping & payment',
-      lead: 'CDEK across Russia. Postal service worldwide.',
+      lead: 'CDEK across Russia and the CIS. Russian Post elsewhere.',
       body: [
-        'Inside Russia the parcel travels with CDEK, to your door or to a pickup point. The cost is calculated at checkout from the address.',
-        'Elsewhere the order goes by Russian Post. Delivery time depends on the destination.',
+        'Across Russia and the CIS the parcel travels with CDEK, to your door or to a pickup point. The cost is calculated at checkout from the address.',
+        'The CIS here means Belarus, Kazakhstan, Azerbaijan, Armenia, Kyrgyzstan, Uzbekistan and Tajikistan.',
+        'To Türkiye, Spain and the UAE the order goes by Russian Post. There are no pickup points there — delivery is to the address, and the time depends on the destination.',
         `Payment methods and the free-shipping threshold: ${BLANKS.data}`,
       ],
     },
@@ -780,8 +782,8 @@ const en: Dict = {
     subscribeOff: 'The mailing list is not connected yet.',
   },
   promise: {
-    shipping: 'CDEK across Russia',
-    worldwide: 'Postal service worldwide',
+    shipping: 'CDEK across Russia and the CIS',
+    worldwide: 'Russian Post elsewhere',
     cost: 'Cost is set at checkout',
   },
 }
@@ -892,10 +894,11 @@ const ar: Dict = {
     },
     delivery: {
       title: 'الشحن والدفع',
-      lead: 'CDEK داخل روسيا. وبالبريد إلى بقية العالم.',
+      lead: 'CDEK داخل روسيا ورابطة الدول المستقلة. وبالبريد الروسي إلى بقية الدول.',
       body: [
-        'داخل روسيا يصل الطرد عبر CDEK إلى الباب أو إلى نقطة استلام. وتُحتسب التكلفة عند إتمام الطلب حسب العنوان.',
-        'وإلى الدول الأخرى يُرسَل الطلب بالبريد الروسي. وتعتمد المدة على بلد الوصول.',
+        'داخل روسيا ودول رابطة الدول المستقلة يصل الطرد عبر CDEK إلى الباب أو إلى نقطة استلام. وتُحتسب التكلفة عند إتمام الطلب حسب العنوان.',
+        'ورابطة الدول المستقلة هنا هي بيلاروس وكازاخستان وأذربيجان وأرمينيا وقيرغيزستان وأوزبكستان وطاجيكستان.',
+        'وإلى تركيا وإسبانيا والإمارات يُرسَل الطلب بالبريد الروسي. ولا توجد هناك نقاط استلام — التوصيل إلى العنوان فقط، وتعتمد المدة على بلد الوصول.',
         `طرق الدفع وحدّ الشحن المجاني: ${BLANKS.data}`,
       ],
     },
@@ -1045,8 +1048,8 @@ const ar: Dict = {
     subscribeOff: 'القائمة البريدية غير مفعّلة بعد.',
   },
   promise: {
-    shipping: 'CDEK داخل روسيا',
-    worldwide: 'بالبريد إلى العالم',
+    shipping: 'CDEK داخل روسيا ورابطة الدول المستقلة',
+    worldwide: 'بالبريد الروسي إلى بقية الدول',
     cost: 'التكلفة عند إتمام الطلب',
   },
 }

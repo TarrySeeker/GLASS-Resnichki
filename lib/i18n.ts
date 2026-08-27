@@ -77,10 +77,29 @@ export type Country = {
   /** Название страны на всех трёх языках витрины: код ISO покупателю ничего не говорит. */
   name: Record<Locale, string>
   currency: Currency
-  /** Как посылка уходит в эту страну. Из брифа: СДЭК по России, почта по миру. */
+  /** Как посылка уходит в эту страну. См. комментарий к COUNTRIES. */
   shipping: 'cdek' | 'post'
 }
 
+/**
+ * Страны, куда бренд отправляет заказы.
+ *
+ * Порядок не алфавитный: сначала СНГ, где работает СДЭК, потом остальное.
+ * Так список читается как ответ на вопрос «как ко мне поедет посылка», а не
+ * как справочник.
+ *
+ * Способ доставки — не свойство страны, а граница зоны СДЭК: по России и СНГ
+ * посылку везёт он (курьером или до пункта выдачи), за их пределы уходит
+ * Почта России. Отсюда и поле `shipping`: корзина по нему решает, показывать
+ * ли выбор между курьером и пунктом выдачи, или ставить почту без вариантов.
+ *
+ * Валюта берётся из четырёх, названных клиентом (рубль, доллар, евро, тенге),
+ * плюс дирхам для витрины ОАЭ. Национальных валют СНГ в этом списке нет,
+ * поэтому Азербайджан, Армения, Киргизия, Узбекистан и Таджикистан считают в
+ * долларах — общей валюте прайса для зарубежья. Заменить на манат, драм и
+ * прочее можно в одной строке каждой: добавить код в CURRENCIES и курс в
+ * RATES.
+ */
 export const COUNTRIES: Country[] = [
   {
     code: 'RU',
@@ -89,27 +108,63 @@ export const COUNTRIES: Country[] = [
     shipping: 'cdek',
   },
   {
+    code: 'BY',
+    name: { ru: 'Беларусь', en: 'Belarus', ar: 'بيلاروس' },
+    currency: 'RUB',
+    shipping: 'cdek',
+  },
+  {
     code: 'KZ',
     name: { ru: 'Казахстан', en: 'Kazakhstan', ar: 'كازاخستان' },
     currency: 'KZT',
+    shipping: 'cdek',
+  },
+  {
+    code: 'AZ',
+    name: { ru: 'Азербайджан', en: 'Azerbaijan', ar: 'أذربيجان' },
+    currency: 'USD',
+    shipping: 'cdek',
+  },
+  {
+    code: 'AM',
+    name: { ru: 'Армения', en: 'Armenia', ar: 'أرمينيا' },
+    currency: 'USD',
+    shipping: 'cdek',
+  },
+  {
+    code: 'KG',
+    name: { ru: 'Кыргызстан', en: 'Kyrgyzstan', ar: 'قيرغيزستان' },
+    currency: 'USD',
+    shipping: 'cdek',
+  },
+  {
+    code: 'UZ',
+    name: { ru: 'Узбекистан', en: 'Uzbekistan', ar: 'أوزبكستان' },
+    currency: 'USD',
+    shipping: 'cdek',
+  },
+  {
+    code: 'TJ',
+    name: { ru: 'Таджикистан', en: 'Tajikistan', ar: 'طاجيكستان' },
+    currency: 'USD',
+    shipping: 'cdek',
+  },
+  {
+    code: 'TR',
+    name: { ru: 'Турция', en: 'Türkiye', ar: 'تركيا' },
+    currency: 'USD',
+    shipping: 'post',
+  },
+  {
+    code: 'ES',
+    name: { ru: 'Испания', en: 'Spain', ar: 'إسبانيا' },
+    currency: 'EUR',
     shipping: 'post',
   },
   {
     code: 'AE',
     name: { ru: 'ОАЭ', en: 'United Arab Emirates', ar: 'الإمارات' },
     currency: 'AED',
-    shipping: 'post',
-  },
-  {
-    code: 'DE',
-    name: { ru: 'Германия', en: 'Germany', ar: 'ألمانيا' },
-    currency: 'EUR',
-    shipping: 'post',
-  },
-  {
-    code: 'US',
-    name: { ru: 'США', en: 'United States', ar: 'الولايات المتحدة' },
-    currency: 'USD',
     shipping: 'post',
   },
 ]
@@ -174,6 +229,8 @@ export function pickCountry(acceptLanguage: string | null): string {
       if (region && known.has(region.toUpperCase())) return region.toUpperCase()
     }
   }
-  const byLocale: Record<Locale, string> = { ru: 'RU', en: 'US', ar: 'AE' }
+  // Английская витрина — это Европа: США в списке стран нет, и подставлять
+  // страну, куда мы не возим, значит соврать про доставку на первом же экране.
+  const byLocale: Record<Locale, string> = { ru: 'RU', en: 'ES', ar: 'AE' }
   return byLocale[pickLocale(acceptLanguage)]
 }

@@ -24,7 +24,7 @@ function shippingCost(method: string, subtotal: number): number {
   if (subtotal >= FREE_FROM) return 0
   if (method === 'pickup') return 250
   if (method === 'courier') return 450
-  return 900 // почта по миру
+  return 900 // Почта России в страны вне зоны СДЭК
 }
 
 export function CartView({ lang }: { lang: Locale }) {
@@ -44,6 +44,9 @@ export function CartView({ lang }: { lang: Locale }) {
     return () => clearTimeout(id)
   }, [undo])
 
+  // Что везёт посылку, решает не корзина, а зона: СДЭК по России и СНГ,
+  // Почта России — за их пределы. Отсюда и разный выбор ниже: у СДЭК есть
+  // курьер и пункт выдачи, у почты — только адрес.
   const shippingKind = COUNTRIES.find((c) => c.code === country)?.shipping ?? 'post'
   const [method, setMethod] = useState<'courier' | 'pickup' | 'post'>('courier')
   const activeMethod = shippingKind === 'cdek' ? method : 'post'
