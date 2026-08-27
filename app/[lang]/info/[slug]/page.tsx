@@ -119,17 +119,30 @@ export default async function InfoPage({
             <div className="mt-8 grid gap-10 lg:grid-cols-12 lg:gap-[var(--col-gap)]">
               <h1 className="t-h2 lg:col-span-12">{page.title}</h1>
 
+              {/* Первая строка идёт во всю ширину под заголовком: это не абзац
+                  текста, а подзаголовок, и колонка ему не нужна. Предел меры
+                  шире, чем у основного текста, — одна строка в 48em читается
+                  без усилия, десять уже нет. */}
+              <p className="t-lead max-w-[48em] lg:col-span-12">{page.lead}</p>
+
+              {/* Таблица — во всю ширину сетки, а не в колонку текста. В шести
+                  колонках «на оформлении, по стране назначения» ломалось на
+                  три строки, и три способа доставки читались как двенадцать
+                  строк вместо трёх. Двенадцать колонок дают каждой ячейке
+                  место в одну строку.
+
+                  Стоит она сразу под заголовком: эту страницу открывают с
+                  вопросом «как приедет и почём», а не «почему устроено так» —
+                  сперва ответ, следом причины. */}
+              {slug === 'delivery' ? (
+                <div className="lg:col-span-12">
+                  <DeliveryTable lang={lang} />
+                </div>
+              ) : null}
+
               <div className="max-w-[36em] lg:col-span-6">
-                <p className="t-lead">{page.lead}</p>
-
-                {/* На доставке таблица идёт перед объяснением. Человек
-                    открывает эту страницу с вопросом «как приедет и почём», а
-                    не «почему устроено так»: сперва ответ, следом причины.
-                    Раньше до таблицы приходилось прочесть пять абзацев. */}
-                {slug === 'delivery' ? <DeliveryTable lang={lang} /> : null}
-
                 {'body' in page ? (
-                  <div className={`flex flex-col gap-5 ${slug === 'delivery' ? 'mt-12' : 'mt-8'}`}>
+                  <div className="flex flex-col gap-5">
                     {page.body.map((par) => (
                       <p key={par} className="t-lead t-muted">
                         {par}
@@ -185,41 +198,58 @@ export default async function InfoPage({
 /**
  * Способы доставки таблицей.
  *
- * Абзацы объясняют, почему для одной страны есть выбор, а для другой нет;
- * таблица отвечает на вопрос «а конкретно мне». Строки те же три, что и в
- * корзине, и заведены они там же — переставлять их надо в одном месте.
+ * Лид отвечает в одну строку, таблица — по существу: чем везут, куда, за
+ * сколько и почём. Абзацы ниже объясняют, почему для одной страны есть выбор,
+ * а для другой нет.
+ *
+ * Строки те же три, что и в корзине, и заведены они там же — переставлять их
+ * надо в одном месте.
  *
  * Срок стоит заглушкой намеренно: его считает перевозчик по адресу, и любое
  * число здесь было бы обещанием, которого бренд не давал.
  *
- * На телефоне это не таблица, а карточки: четыре колонки в 336 px не встают,
- * а горизонтальная прокрутка ради трёх строк — плохая цена.
+ * С 1024 это настоящая таблица: подписи колонок стоят один раз в шапке, а
+ * каждый способ занимает одну строку. Ниже — карточки: четыре колонки в
+ * 336 px не встают, а горизонтальная прокрутка ради трёх строк плохая цена.
+ * Переключает раскладку display: contents — разметка одна на оба случая.
  */
 function DeliveryTable({ lang }: { lang: Locale }) {
   const page = CONTENT[lang].info.delivery
+  const c = page.methodsCols
+  const cells = 'lg:grid lg:grid-cols-12 lg:gap-x-[var(--col-gap)]'
 
   return (
     <section className="mt-12">
       <h2 className="t-h3">{page.methodsTitle}</h2>
 
-      {/* Список способов, а внутри каждого — свой <dl> с парами. Имя
-          перевозчика в общий <dl> не положить: там разрешены только dt, dd и
-          обёртка div вокруг них, и абзац посреди списка ломает разметку. */}
-      <ul className="mt-6">
+      {/* Шапка таблицы только на широком экране: в карточках подпись стоит у
+          каждого значения, и повторять её сверху незачем. */}
+      <div className={`t-label t-muted mt-6 hidden border-b border-[var(--color-rule)] pb-3 ${cells}`}>
+        <span className="lg:col-span-3">{c.name}</span>
+        <span className="lg:col-span-3">{c.zone}</span>
+        <span className="lg:col-span-2">{c.time}</span>
+        <span className="lg:col-span-4">{c.cost}</span>
+      </div>
+
+      <ul>
         {page.methods.map((m) => (
-          <li key={m.name} className="border-t border-[var(--color-rule)] py-5">
-            <p className="t-nav">{m.name}</p>
-            <dl className="mt-3 grid gap-x-8 gap-y-2 sm:grid-cols-3">
+          <li
+            key={m.name}
+            className={`border-t border-[var(--color-rule)] py-5 lg:items-baseline ${cells}`}
+          >
+            <p className="t-nav lg:col-span-3">{m.name}</p>
+
+            <dl className={`mt-3 grid gap-x-8 gap-y-2 sm:grid-cols-3 lg:contents`}>
               {(
                 [
-                  [page.methodsCols.zone, m.zone],
-                  [page.methodsCols.time, m.time],
-                  [page.methodsCols.cost, m.cost],
+                  [c.zone, m.zone, 'lg:col-span-3'],
+                  [c.time, m.time, 'lg:col-span-2'],
+                  [c.cost, m.cost, 'lg:col-span-4'],
                 ] as const
-              ).map(([label, value]) => (
-                <div key={label}>
-                  <dt className="t-label t-muted">{label}</dt>
-                  <dd className="t-label pt-1">{value}</dd>
+              ).map(([label, value, span]) => (
+                <div key={label} className={span}>
+                  <dt className="t-label t-muted lg:sr-only">{label}</dt>
+                  <dd className="t-label pt-1 lg:pt-0">{value}</dd>
                 </div>
               ))}
             </dl>
