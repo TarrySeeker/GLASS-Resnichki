@@ -45,13 +45,21 @@ export function FavoritesView({ lang }: { lang: Locale }) {
         <p className="t-lead t-muted mt-4 max-w-xl">{t.favorites.lead}</p>
 
         {!ready ? null : items.length ? (
-          <div className="mt-10 grid grid-cols-12 gap-x-[var(--col-gap)] gap-y-12">
-            {items.map((p, i) => (
-              <div key={p.id} className="col-span-6 md:col-span-4 lg:col-span-3">
-                <ProductCard product={p} lang={lang} priority={i < 4} />
-              </div>
-            ))}
-          </div>
+          <>
+            <div className="mt-10 grid grid-cols-12 gap-x-[var(--col-gap)] gap-y-12">
+              {items.map((p, i) => (
+                <div key={p.id} className="col-span-6 md:col-span-4 lg:col-span-3">
+                  <ProductCard product={p} lang={lang} priority={i < 4} />
+                </div>
+              ))}
+            </div>
+
+            {/* Действие в конце списка: отложенное просматривают, чтобы решить,
+                и решение чаще звучит как «посмотрю ещё», чем как «беру это». */}
+            <Link href={`/${lang}/catalog`} className="btn btn-wide mt-12">
+              {t.cart.toShop}
+            </Link>
+          </>
         ) : (
           <div className="mt-10 border-t border-[var(--color-rule)] py-20 text-center">
             <p className="t-h3">{t.favorites.empty}</p>

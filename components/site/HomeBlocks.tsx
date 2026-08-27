@@ -419,8 +419,8 @@ export function CategoriesBlock({ lang }: { lang: Locale }) {
           <Image
             src="/media/categories.jpg"
             alt=""
-            width={900}
-            height={1200}
+            width={1500}
+            height={2000}
             sizes="(max-width: 1024px) 1px, 30vw"
           />
         </div>

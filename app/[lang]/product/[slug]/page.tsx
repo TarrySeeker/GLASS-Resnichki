@@ -300,6 +300,19 @@ export default async function ProductPage({
           </section>
         ) : null}
         <RecentlyViewed slug={product.slug} lang={lang} />
+
+        {/* Действие в конце страницы. Липкая полоса покупки предлагает этот
+            товар и следует за человеком всю страницу; здесь предложение
+            другое — тому, кто дочитал до конца и этот товар не взял, нужен
+            выход не в корзину, а обратно к выбору. */}
+        <section className="sec border-t border-[var(--color-rule)]">
+          <div className="wrap flex flex-wrap items-baseline justify-between gap-6">
+            <p className="t-h3 max-w-md">{t.blocks.finderTitle}</p>
+            <Link href={`/${lang}/catalog`} className="btn btn-wide">
+              {t.cart.toShop}
+            </Link>
+          </div>
+        </section>
       </main>
       <Footer lang={lang} />
     </>
