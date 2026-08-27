@@ -251,6 +251,83 @@ type Dict = {
     /** Сервис рассылки не подключён — говорим это прямо, а не молчим. */
     subscribeOff: string
   }
+  /**
+   * Личный кабинет. Пока это только раскладка: сервера за ней нет, и
+   * `note` говорит об этом прямо — так же, как `subscribeOff` про рассылку.
+   */
+  account: {
+    title: string
+    note: string
+    signIn: string
+    signUp: string
+    signOut: string
+    sections: { profile: string; orders: string; addresses: string; returns: string }
+    profile: {
+      lead: string
+      name: string
+      surname: string
+      email: string
+      phone: string
+      birthday: string
+      birthdayHint: string
+      save: string
+      security: string
+      password: string
+      passwordChange: string
+    }
+    orders: {
+      lead: string
+      number: string
+      date: string
+      status: string
+      sum: string
+      track: string
+      items: string
+      repeat: string
+      empty: string
+      emptyCta: string
+    }
+    addresses: {
+      lead: string
+      add: string
+      main: string
+      makeMain: string
+      recipient: string
+      country: string
+      city: string
+      street: string
+      zip: string
+      phone: string
+      save: string
+      cancel: string
+      edit: string
+      remove: string
+      empty: string
+    }
+    returns: {
+      lead: string
+      order: string
+      item: string
+      reason: string
+      reasons: string[]
+      comment: string
+      photos: string
+      photosHint: string
+      photosPick: string
+      photosRemove: string
+      send: string
+      sent: string
+    }
+    auth: {
+      lead: string
+      email: string
+      password: string
+      passwordRepeat: string
+      forgot: string
+      noAccount: string
+      hasAccount: string
+    }
+  }
   /** Полоса условий над футером: только то, что известно наверняка. */
   promise: { shipping: string; worldwide: string; cost: string }
 }
@@ -514,6 +591,79 @@ const ru: Dict = {
     subscribeCta: 'Подписаться',
     subscribeOk: 'Готово. Проверьте почту.',
     subscribeOff: 'Рассылка ещё не подключена.',
+  },
+  account: {
+    title: 'Кабинет',
+    note: 'Кабинет ещё не подключён к серверу: раскладка готова, но ничего не сохраняется и никуда не отправляется.',
+    signIn: 'Войти',
+    signUp: 'Регистрация',
+    signOut: 'Выйти',
+    sections: { profile: 'Профиль', orders: 'Заказы', addresses: 'Адреса', returns: 'Возврат' },
+    profile: {
+      lead: 'Имя и телефон нужны курьеру, почта — чтобы прислать номер отправления.',
+      name: 'Имя',
+      surname: 'Фамилия',
+      email: 'Email',
+      phone: 'Телефон',
+      birthday: 'Дата рождения',
+      birthdayHint: 'Необязательно. Нужна только для поздравления.',
+      save: 'Сохранить',
+      security: 'Безопасность',
+      password: 'Пароль',
+      passwordChange: 'Сменить пароль',
+    },
+    orders: {
+      lead: 'Заказы не выдуманы и не подставлены: сюда встанут настоящие — с номером, статусом и трек-номером.',
+      number: 'Заказ',
+      date: 'Дата',
+      status: 'Статус',
+      sum: 'Сумма',
+      track: 'Трек-номер',
+      items: 'Состав',
+      repeat: 'Повторить заказ',
+      empty: 'Заказов пока нет',
+      emptyCta: 'В каталог',
+    },
+    addresses: {
+      lead: 'Сохранённый адрес не приходится вводить заново при каждом заказе.',
+      add: 'Добавить адрес',
+      main: 'Основной',
+      makeMain: 'Сделать основным',
+      recipient: 'Получатель',
+      country: 'Страна',
+      city: 'Город',
+      street: 'Улица, дом, квартира',
+      zip: 'Индекс',
+      phone: 'Телефон',
+      save: 'Сохранить',
+      cancel: 'Отмена',
+      edit: 'Изменить',
+      remove: 'Удалить',
+      empty: 'Адресов пока нет',
+    },
+    returns: {
+      lead: 'Ресницы, клей и праймер — товары личной гигиены: вскрытую упаковку вернуть нельзя.',
+      order: 'Номер заказа',
+      item: 'Товар',
+      reason: 'Причина',
+      reasons: ['Не подошла длина', 'Не подошёл изгиб', 'Повреждена упаковка', 'Пришло не то', 'Другое'],
+      comment: 'Что случилось',
+      photos: 'Фотографии',
+      photosHint: 'Перетащите файлы сюда или выберите на устройстве. До пяти кадров.',
+      photosPick: 'Выбрать файлы',
+      photosRemove: 'Убрать кадр',
+      send: 'Отправить заявку',
+      sent: 'Заявка не ушла: приём возвратов ещё не подключён.',
+    },
+    auth: {
+      lead: 'Заказы, адреса и возвраты хранятся в кабинете.',
+      email: 'Email',
+      password: 'Пароль',
+      passwordRepeat: 'Пароль ещё раз',
+      forgot: 'Забыли пароль?',
+      noAccount: 'Нет аккаунта? Зарегистрируйтесь',
+      hasAccount: 'Уже есть аккаунт? Войдите',
+    },
   },
   promise: {
     shipping: 'СДЭК по России и СНГ',
@@ -781,6 +931,79 @@ const en: Dict = {
     subscribeOk: 'Done. Check your inbox.',
     subscribeOff: 'The mailing list is not connected yet.',
   },
+  account: {
+    title: 'Account',
+    note: 'The account is not wired to a server yet: the layout is ready, but nothing is saved or sent anywhere.',
+    signIn: 'Sign in',
+    signUp: 'Create account',
+    signOut: 'Sign out',
+    sections: { profile: 'Profile', orders: 'Orders', addresses: 'Addresses', returns: 'Returns' },
+    profile: {
+      lead: 'The courier needs a name and a phone; the email is where the tracking number goes.',
+      name: 'First name',
+      surname: 'Last name',
+      email: 'Email',
+      phone: 'Phone',
+      birthday: 'Date of birth',
+      birthdayHint: 'Optional. Used only to send birthday wishes.',
+      save: 'Save',
+      security: 'Security',
+      password: 'Password',
+      passwordChange: 'Change password',
+    },
+    orders: {
+      lead: 'Orders are neither invented nor staged: real ones will stand here — with a number, a status and a tracking number.',
+      number: 'Order',
+      date: 'Date',
+      status: 'Status',
+      sum: 'Total',
+      track: 'Tracking number',
+      items: 'Items',
+      repeat: 'Order again',
+      empty: 'No orders yet',
+      emptyCta: 'To the catalogue',
+    },
+    addresses: {
+      lead: 'A saved address does not have to be typed again with every order.',
+      add: 'Add an address',
+      main: 'Default',
+      makeMain: 'Make default',
+      recipient: 'Recipient',
+      country: 'Country',
+      city: 'City',
+      street: 'Street, building, flat',
+      zip: 'Postcode',
+      phone: 'Phone',
+      save: 'Save',
+      cancel: 'Cancel',
+      edit: 'Edit',
+      remove: 'Delete',
+      empty: 'No addresses yet',
+    },
+    returns: {
+      lead: 'Lashes, adhesive and primer are personal-care goods: an opened package cannot be returned.',
+      order: 'Order number',
+      item: 'Item',
+      reason: 'Reason',
+      reasons: ['Wrong length', 'Wrong curl', 'Damaged package', 'Wrong item arrived', 'Something else'],
+      comment: 'What happened',
+      photos: 'Photos',
+      photosHint: 'Drop files here or pick them from your device. Up to five frames.',
+      photosPick: 'Choose files',
+      photosRemove: 'Remove frame',
+      send: 'Send the request',
+      sent: 'Nothing was sent: return intake is not wired up yet.',
+    },
+    auth: {
+      lead: 'Orders, addresses and returns live in the account.',
+      email: 'Email',
+      password: 'Password',
+      passwordRepeat: 'Password again',
+      forgot: 'Forgotten your password?',
+      noAccount: 'No account? Create one',
+      hasAccount: 'Already have an account? Sign in',
+    },
+  },
   promise: {
     shipping: 'CDEK across Russia and the CIS',
     worldwide: 'Russian Post elsewhere',
@@ -1046,6 +1269,79 @@ const ar: Dict = {
     subscribeCta: 'اشتراك',
     subscribeOk: 'تم. تفقّدي بريدكِ.',
     subscribeOff: 'القائمة البريدية غير مفعّلة بعد.',
+  },
+  account: {
+    title: 'حسابي',
+    note: 'الحساب غير موصول بخادم بعد: التصميم جاهز، لكن لا شيء يُحفَظ أو يُرسَل.',
+    signIn: 'تسجيل الدخول',
+    signUp: 'إنشاء حساب',
+    signOut: 'تسجيل الخروج',
+    sections: { profile: 'الملف', orders: 'الطلبات', addresses: 'العناوين', returns: 'الإرجاع' },
+    profile: {
+      lead: 'المندوب يحتاج الاسم والهاتف، والبريد هو مكان وصول رقم التتبّع.',
+      name: 'الاسم',
+      surname: 'اسم العائلة',
+      email: 'البريد الإلكتروني',
+      phone: 'الهاتف',
+      birthday: 'تاريخ الميلاد',
+      birthdayHint: 'اختياري. للتهنئة فقط.',
+      save: 'حفظ',
+      security: 'الأمان',
+      password: 'كلمة المرور',
+      passwordChange: 'تغيير كلمة المرور',
+    },
+    orders: {
+      lead: 'الطلبات ليست مُختلَقة ولا موضوعة: ستقف هنا طلبات حقيقية — برقم وحالة ورقم تتبّع.',
+      number: 'الطلب',
+      date: 'التاريخ',
+      status: 'الحالة',
+      sum: 'الإجمالي',
+      track: 'رقم التتبّع',
+      items: 'المحتويات',
+      repeat: 'إعادة الطلب',
+      empty: 'لا توجد طلبات بعد',
+      emptyCta: 'إلى الكتالوج',
+    },
+    addresses: {
+      lead: 'العنوان المحفوظ لا يُكتَب من جديد مع كل طلب.',
+      add: 'إضافة عنوان',
+      main: 'الافتراضي',
+      makeMain: 'جعله الافتراضي',
+      recipient: 'المستلم',
+      country: 'الدولة',
+      city: 'المدينة',
+      street: 'الشارع والمبنى والشقة',
+      zip: 'الرمز البريدي',
+      phone: 'الهاتف',
+      save: 'حفظ',
+      cancel: 'إلغاء',
+      edit: 'تعديل',
+      remove: 'حذف',
+      empty: 'لا توجد عناوين بعد',
+    },
+    returns: {
+      lead: 'الرموش واللاصق والبرايمر من مواد العناية الشخصية: لا تُرجَع العبوة بعد فتحها.',
+      order: 'رقم الطلب',
+      item: 'المنتج',
+      reason: 'السبب',
+      reasons: ['الطول غير مناسب', 'الانحناء غير مناسب', 'العبوة تالفة', 'وصل منتج آخر', 'سبب آخر'],
+      comment: 'ماذا حدث',
+      photos: 'الصور',
+      photosHint: 'اسحب الملفات إلى هنا أو اخترها من جهازك. حتى خمس صور.',
+      photosPick: 'اختيار الملفات',
+      photosRemove: 'إزالة الصورة',
+      send: 'إرسال الطلب',
+      sent: 'لم يُرسَل شيء: استقبال طلبات الإرجاع غير موصول بعد.',
+    },
+    auth: {
+      lead: 'الطلبات والعناوين والإرجاع تُحفَظ في الحساب.',
+      email: 'البريد الإلكتروني',
+      password: 'كلمة المرور',
+      passwordRepeat: 'كلمة المرور مرة أخرى',
+      forgot: 'نسيت كلمة المرور؟',
+      noAccount: 'لا تملك حساباً؟ أنشئ حساباً',
+      hasAccount: 'لديك حساب؟ سجّل الدخول',
+    },
   },
   promise: {
     shipping: 'CDEK داخل روسيا ورابطة الدول المستقلة',

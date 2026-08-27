@@ -9,6 +9,7 @@ import { Switchers } from '@/components/site/Switchers'
 import { PromoBar } from '@/components/site/PromoBar'
 import { CartCount } from '@/components/site/CartCount'
 import { SearchPanel } from '@/components/site/SearchPanel'
+import { SignIn } from '@/components/site/SignIn'
 import { PRODUCTS } from '@/lib/catalog'
 
 /**
@@ -114,6 +115,11 @@ export function Header({ lang }: { lang: Locale }) {
           <span className="hidden sm:inline-flex">
             <SearchPanel lang={lang} />
           </span>
+          {/* Кабинет открывается панелью входа: на телефоне он в меню, здесь
+              его прячем до 1024, иначе в строке шапки не остаётся места. */}
+          <span className="hidden lg:inline-flex">
+            <SignIn lang={lang} />
+          </span>
           <Link href={`/${lang}/cart`} className="lnk tap whitespace-nowrap">
             {t.nav.cart}
             <span className="ms-1">
@@ -137,6 +143,9 @@ export function Header({ lang }: { lang: Locale }) {
               </li>
             ))}
           </ul>
+          <div className="t-nav border-b border-[var(--color-rule)] py-4">
+            <SignIn lang={lang} />
+          </div>
           <div className="pt-6">
             <Switchers lang={lang} fields={['lang', 'currency']} />
           </div>

@@ -1534,3 +1534,50 @@ dialog[open]::backdrop {
     display: block;
   }
 }
+
+/* ─── Формы кабинета ───────────────────────────────────────────────────────
+   Поле — линия снизу, а не рамка. На витрине нет ни одной коробки, и форма
+   не должна становиться первой: подпись сверху мелким кеглем, значение
+   кеглем строки, между ними линия, которая темнеет под фокусом. Рамка
+   остаётся за кнопками и за полями в панелях, где нужно обозначить границу
+   всплывающего слоя.                                                        */
+.inp {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  border-bottom: 1px solid var(--color-rule);
+  background: transparent;
+  padding-block: 0.625rem;
+  outline-offset: 4px;
+  transition: border-color var(--dur-fast) var(--ease-brand);
+}
+
+.inp:focus {
+  border-bottom-color: var(--color-ink);
+}
+
+.inp::placeholder {
+  color: var(--color-muted);
+}
+
+textarea.inp {
+  min-height: 7rem;
+  resize: vertical;
+}
+
+/* Зона перетаскивания для фотографий к заявке на возврат. Пунктир — тот
+   редкий случай, когда он оправдан: он и означает «сюда можно положить». */
+.drop {
+  border: 1px dashed var(--color-rule);
+  padding: 2rem 1.25rem;
+  text-align: center;
+  transition:
+    border-color var(--dur-fast) var(--ease-brand),
+    background-color var(--dur-fast) var(--ease-brand);
+}
+
+.drop[data-over='true'] {
+  border-color: var(--color-ink);
+  border-style: solid;
+  background: var(--color-tile);
+}
