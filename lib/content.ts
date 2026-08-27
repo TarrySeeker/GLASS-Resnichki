@@ -120,7 +120,13 @@ type Dict = {
     kitDone: string
   }
   info: {
-    about: { title: string; lead: string; body: string[] }
+    about: {
+      title: string
+      lead: string
+      /** Строка бренда о себе. Стоит между заголовком и текстом, набором крупнее. */
+      claim: string
+      body: string[]
+    }
     contacts: { title: string; lead: string; phone: string; address: string }
     delivery: {
       title: string
@@ -446,11 +452,11 @@ const ru: Dict = {
     about: {
       title: 'О бренде',
       lead: 'Профессиональный бренд пучковых ресниц. Создан визажистом Светланой Лелари в 2021 году.',
+      claim: 'Открой миру свой взгляд.',
       body: [
         'GLASS EYELASHES — абсолютно новый подход к производству пучковых ресниц для визажистов и любителей макияжа. Роскошный объём, угольно-чёрный цвет и идеальный изгиб — это про нас.',
         'Мы собираем воедино все преимущества мгновенного наращивания и делаем его простым и доступным каждому. Каждый пучок идеально отклеивается от ленты, не теряя своего объёма.',
         'Линейки BASIC и CLASSIC различаются объёмом: 10D и 20D. Длины — 8, 11 и 14 мм, изгиб C. Отдельно идут палетки-миксы и многоразовая лента FLAMBOYANCE.',
-        'Открой миру свой взгляд.',
       ],
     },
     contacts: {
@@ -818,11 +824,11 @@ const en: Dict = {
     about: {
       title: 'About',
       lead: 'A professional cluster-lash brand. Founded in 2021 by the makeup artist Svetlana Lelari.',
+      claim: 'Open your eyes to the world.',
       body: [
         'GLASS EYELASHES is a genuinely new approach to making cluster lashes, for makeup artists and for anyone who does their own. Rich volume, coal-black colour and an exact curl — that is us.',
         'We take everything that makes extensions worth having and make it simple and available to everyone. Every cluster lifts off the strip cleanly, without losing its volume.',
         'BASIC and CLASSIC differ by volume: 10D and 20D. Lengths are 8, 11 and 14 mm, C curl. Mixed trays and the reusable FLAMBOYANCE strip sit alongside them.',
-        'Open your eyes to the world.',
       ],
     },
     contacts: {
@@ -1190,11 +1196,11 @@ const ar: Dict = {
     about: {
       title: 'عن العلامة',
       lead: 'علامة احترافية لرموش العناقيد. أسّستها خبيرة المكياج سفيتلانا ليلاري عام 2021.',
+      claim: 'افتحي عينيك على العالم.',
       body: [
         'GLASS EYELASHES نهج جديد تمامًا في صناعة رموش العناقيد، لخبيرات المكياج ولكل من تضع مكياجها بنفسها. كثافة فاخرة ولون أسود فحمي وانحناء مثالي — هذا ما نحن عليه.',
         'نجمع كل مزايا التركيب الفوري ونجعله بسيطًا ومتاحًا للجميع. كل خصلة ترتفع عن الشريط بنظافة، دون أن تفقد كثافتها.',
         'يختلف خطّا BASIC و CLASSIC في الكثافة: 10D و 20D. الأطوال 8 و11 و14 مم بانحناء C. وإلى جانبهما علب الميكس وشريط FLAMBOYANCE القابل لإعادة الاستخدام.',
-        'افتحي عينيك على العالم.',
       ],
     },
     contacts: {

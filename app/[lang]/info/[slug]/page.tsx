@@ -96,6 +96,10 @@ export default async function InfoPage({
      заголовок с первой строкой у неё тоже идут во всю ширину: над таблицей,
      а не сбоку от неё. */
   const wide = slug === 'delivery'
+  /* «О бренде» — единственная страница, где текст не отвечает на вопрос, а
+     рассказывает. Отсюда своя раскладка: колонка уже и отступлена на одну
+     колонку от края, кадр лежачий и выровнен по середине текста. */
+  const story = slug === 'about'
 
   return (
     <>
@@ -148,7 +152,11 @@ export default async function InfoPage({
                   по ней меряется кадр, а не наоборот. */}
               {/* Колонка объявлена контейнером: от её ширины считается кегль
                   заголовка на странице политики. */}
-              <div className="max-w-[36em] [container-type:inline-size] lg:col-span-6 lg:self-start">
+              <div
+                className={`max-w-[36em] [container-type:inline-size] lg:self-start ${
+                  story ? 'lg:col-span-5 lg:col-start-2' : 'lg:col-span-6'
+                }`}
+              >
                 {wide ? null : (
                   <>
                     {/* «Конфиденциальность» — восемнадцать букв без единого
@@ -159,7 +167,15 @@ export default async function InfoPage({
                     <h1 className={`t-h2 ${slug === 'privacy' ? 't-h2-fit' : ''}`}>
                       {page.title}
                     </h1>
-                    <p className="t-lead mt-6">{page.lead}</p>
+                    {/* Строка бренда о себе — набором заголовка, между именем
+                        раздела и рассказом. Раньше она стояла последним абзацем
+                        и терялась среди характеристик линеек, хотя это
+                        единственное предложение здесь, которое бренд говорит о
+                        себе, а не о товаре. */}
+                    {story && 'claim' in page ? (
+                      <p className="t-h3 mt-6">{page.claim}</p>
+                    ) : null}
+                    <p className={`t-lead ${story ? 'mt-8' : 'mt-6'}`}>{page.lead}</p>
                   </>
                 )}
 
@@ -183,7 +199,15 @@ export default async function InfoPage({
                 </Link>
               </div>
 
-              {/* Кадр во всю высоту левой колонки и без обрезки — а значит,
+              {/* На странице бренда кадр живёт иначе: он лежачий, во всю
+                  ширину своих пяти колонок, и выровнен по середине текста. Два
+                  лица рядом — композиция сама по себе горизонтальная, в полосе
+                  они читаются разворотом, а не обрезком вертикали. Высоту он
+                  берёт от собственной пропорции: этой странице нечего
+                  выравнивать по строке, ей нужно, чтобы кадр смотрелся.
+
+                  На остальных четырёх кадр во всю высоту левой колонки и без
+                  обрезки — а значит,
                   ширину ему задаёт собственная пропорция, а не сетка. Он
                   прижат к правому краю, и его левая кромка гуляет от страницы
                   к странице вместе с длиной текста. Это и есть та пустота,
@@ -203,8 +227,12 @@ export default async function InfoPage({
                   До 1024 кадра нет: там текст идёт во всю ширину, и картинка
                   над ним отодвинула бы ответ на вопрос, ради которого сюда
                   пришли. */}
-              <div className="rise relative hidden lg:col-span-5 lg:col-start-8 lg:block">
-                <span className="absolute inset-0 flex justify-end">
+              <div
+                className={`rise relative hidden lg:block ${
+                  story ? 'lg:col-span-5 lg:col-start-8 lg:self-center' : 'lg:col-span-5 lg:col-start-8'
+                }`}
+              >
+                <span className={story ? 'block' : 'absolute inset-0 flex justify-end'}>
                   <Image
                     src={ART[slug].src}
                     alt=""
@@ -214,7 +242,11 @@ export default async function InfoPage({
                     /* Вверх, а не по центру: если ширина колонки не даёт
                        набрать полную высоту, недобор уходит вниз одним полем,
                        а не двумя по краям. */
-                    className="h-full w-auto max-w-full object-contain object-top"
+                    className={
+                      story
+                        ? 'block h-auto w-full'
+                        : 'h-full w-auto max-w-full object-contain object-top'
+                    }
                   />
                 </span>
               </div>
