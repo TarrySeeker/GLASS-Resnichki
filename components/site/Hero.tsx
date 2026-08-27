@@ -58,9 +58,9 @@ export function Hero({ lang }: { lang: Locale }) {
   const [l1, l2] = t.home.heroLine.split('\n')
 
   const faces = [
-    { src: '/media/hero-portrait.jpg', w: 858, h: 1280 },
-    { src: '/media/editorial-1.jpg', w: 720, h: 1280 },
-    { src: '/media/editorial-2.jpg', w: 714, h: 1280 },
+    { src: '/media/hero-portrait.jpg', w: 1340, h: 2000 },
+    { src: '/media/editorial-1.jpg', w: 1124, h: 2000 },
+    { src: '/media/editorial-2.jpg', w: 1116, h: 2000 },
   ]
 
   return (
