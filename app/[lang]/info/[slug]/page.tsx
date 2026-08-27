@@ -100,11 +100,10 @@ export default async function InfoPage({
      рассказывает. Отсюда своя раскладка: колонка уже и отступлена на одну
      колонку от края, кадр лежачий и выровнен по середине текста. */
   const story = slug === 'about'
-  /* Кадр остался на одной странице из пяти. У доставки, возврата и контактов
+  /* Кадр остался на двух страницах из пяти. У доставки, возврата и контактов
      текст отвечает на вопрос, и фотография коробки рядом с ответом ничего к
-     нему не прибавляла; у бренда рассказ говорит сам за себя и занимает всю
-     полосу. */
-  const art = slug === 'privacy'
+     нему не прибавляла. */
+  const art = story || slug === 'privacy'
 
   return (
     <>
@@ -148,11 +147,10 @@ export default async function InfoPage({
                   <h1 className="t-h2 lg:col-span-12">{page.title}</h1>
                   <p className="t-lead max-w-[36em] lg:col-span-12">{page.lead}</p>
 
-                  {/* Таблица лежит на чернилах и во всю ширину окна. Это
-                      единственный ответ на странице, и плоскость отделяет его
-                      от объяснений так же, как футер отделяет служебный слой
-                      от витрины, — цветом, а не рамкой. */}
-                  <div className="band on-ink py-10 lg:col-span-12 lg:py-14">
+                  {/* Таблица во всю ширину сетки и на бумаге, как вся
+                      страница: отделять её плоскостью незачем — она и так
+                      единственное, что стоит между заголовком и объяснениями. */}
+                  <div className="lg:col-span-12">
                     <DeliveryTable lang={lang} />
                   </div>
                 </>
@@ -272,10 +270,10 @@ export default async function InfoPage({
                   поле он не выходит: край окна отбивает его от страницы, а не
                   ставит в один ряд с ней.
 
-                  Четыре колонки, а не пять: текст начинается с пятой, и полоса
-                  кадра обязана кончиться до неё — иначе он занимает пятую
-                  колонку в первой строке, текст уезжает во вторую, и строка
-                  кадра остаётся пустой.
+                  У бренда текст занимает восемь колонок от левого поля, и
+                  кадру остаются последние четыре. Прижат он к началу своей
+                  полосы, а не к концу: так он стоит рядом с текстом, а не
+                  отъезжает к правому краю через полосу пустоты.
 
                   У политики кадр справа и через пустую колонку: там текст
                   отвечает на вопрос, и кадр ему не пара, а соседство. */}
@@ -283,7 +281,7 @@ export default async function InfoPage({
               <div
                 className={`rise relative hidden lg:block ${
                   story
-                    ? 'lg:col-span-4 lg:col-start-1 lg:row-start-1'
+                    ? 'lg:col-span-4 lg:col-start-9'
                     : 'lg:col-span-5 lg:col-start-8'
                 }`}
               >
@@ -340,7 +338,7 @@ function DeliveryTable({ lang }: { lang: Locale }) {
 
       {/* Шапка таблицы только на широком экране: в карточках подпись стоит у
           каждого значения, и повторять её сверху незачем. */}
-      <div className={`t-label t-muted mt-6 hidden border-b border-[var(--color-rule-ink)] pb-3 ${cells}`}>
+      <div className={`t-label t-muted mt-6 hidden border-b border-[var(--color-rule)] pb-3 ${cells}`}>
         <span className="lg:col-span-3">{c.name}</span>
         <span className="lg:col-span-3">{c.zone}</span>
         <span className="lg:col-span-2">{c.time}</span>
@@ -351,7 +349,7 @@ function DeliveryTable({ lang }: { lang: Locale }) {
         {page.methods.map((m) => (
           <li
             key={m.name}
-            className={`border-t border-[var(--color-rule-ink)] py-5 lg:items-baseline ${cells}`}
+            className={`border-t border-[var(--color-rule)] py-5 lg:items-baseline ${cells}`}
           >
             <p className="t-nav lg:col-span-3">{m.name}</p>
 
