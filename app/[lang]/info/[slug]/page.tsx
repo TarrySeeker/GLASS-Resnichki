@@ -79,7 +79,12 @@ export default async function InfoPage({
                 перестаёт читаться, а ширина витрины здесь ничего не даёт. */}
             <div className="mt-8 grid gap-10 lg:grid-cols-12 lg:gap-[var(--col-gap)]">
               <h1 className="t-h2 lg:col-span-4">{page.title}</h1>
-              <div className="lg:col-span-7 lg:col-start-6">
+              {/* Предел в 36em держит длину строки: семь колонок из двенадцати
+                  на широком мониторе дают строку в полторы тысячи пикселей, и
+                  глаз перестаёт находить начало следующей. Раньше это делал
+                  общий предел ширины .wrap — он снят, потому что ломал сетку
+                  страницы, а ограничивать надо не полосу, а текст. */}
+              <div className="max-w-[36em] lg:col-span-7 lg:col-start-6">
                 <p className="t-lead">{page.lead}</p>
 
                 {'body' in page ? (

@@ -79,9 +79,9 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
                 приходится пролистывать целиком, чтобы дойти до следующего
                 блока. Лентой ряд занимает одну карточку по высоте, а вход в
                 весь каталог стоит под ним отдельной целью. */}
-            <div className="mrail rail-cards mt-8 sm:grid sm:grid-cols-3 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-4">
+            <div className="mrail rail-cards mt-8 sm:grid sm:grid-cols-12 sm:gap-x-[var(--col-gap)] sm:gap-y-10">
               {best.map((p) => (
-                <div key={p.id}>
+                <div key={p.id} className="sm:col-span-4 lg:col-span-3">
                   <ProductCard product={p} lang={lang} />
                 </div>
               ))}

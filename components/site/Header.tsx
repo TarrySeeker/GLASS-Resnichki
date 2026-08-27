@@ -32,6 +32,20 @@ export function Header({ lang }: { lang: Locale }) {
   ]
 
   /**
+   * Служебные страницы. До этого они жили только в футере, и вопрос «когда
+   * приедет и как вернуть» заставлял прокрутить всю страницу до конца — а
+   * задают его чаще всего до покупки, а не после. Тот же список, та же панель,
+   * что у каталога: в шапке он стоит рядом с решением, которое от него
+   * зависит.
+   */
+  const care = [
+    { href: `/${lang}/info/delivery`, label: t.footer.delivery },
+    { href: `/${lang}/info/returns`, label: t.footer.returns },
+    { href: `/${lang}/info/contacts`, label: t.footer.contacts },
+    { href: `/${lang}/info/privacy`, label: t.footer.privacy },
+  ]
+
+  /**
    * Коллекции в выпадающей панели.
    *
    * Плоский ряд из пяти ссылок был нормален для пятнадцати позиций. Сейчас их
@@ -63,7 +77,17 @@ export function Header({ lang }: { lang: Locale }) {
             в полосе высотой 72px нечитаем — слово GLASS сжималось бы до 8px. */}
         <Link href={`/${lang}`} className="tap gap-3" aria-label="GLASS OWM">
           <Image src="/media/logo-mark.png" alt="" width={210} height={254} priority className="h-9 w-auto" />
-          <Image src="/media/logo-word.png" alt="" width={770} height={116} priority className="h-4 w-auto" />
+          {/* Пока меню открыто, слово прячется, а знак остаётся: «Закрыть»
+              шире «Меню» на тридцать пикселей, и на 390 логотип наезжал на
+              корзину. Марка при этом никуда не девается. */}
+          <Image
+            src="/media/logo-word.png"
+            alt=""
+            width={770}
+            height={116}
+            priority
+            className={`h-4 w-auto ${open ? 'hidden lg:block' : ''}`}
+          />
         </Link>
 
         <nav aria-label={t.nav.menu} className="t-nav ms-6 hidden items-center gap-5 whitespace-nowrap lg:flex xl:ms-8 xl:gap-7">
@@ -100,11 +124,42 @@ export function Header({ lang }: { lang: Locale }) {
             </div>
           </div>
 
-          {links.slice(1).map((l) => (
-            <Link key={l.href} href={l.href} className="lnk tap">
+          {/* Три ссылки на разделы каталога прячутся до 1280: они и так лежат
+              в панели «Каталог» слева, а в строке шапки на 1024 занимают
+              320 px, которых там нет — правый край с поиском и корзиной
+              вылезал за экран на сотню пикселей. «О бренде» остаётся: этой
+              страницы в панели нет. */}
+          {links.slice(1).map((l, i) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              className={`lnk tap ${i < 3 ? 'hidden xl:inline-flex' : ''}`}
+            >
               {l.label}
             </Link>
           ))}
+
+          {/* Помощь — такая же панель, как у каталога, и по той же причине:
+              четыре служебные ссылки в одну строку шапки не встают, а прятать
+              их в футер значит прятать ответ на вопрос, который задают до
+              покупки. Состояния в JS нет: раскрывает наведение и фокус. */}
+          <div className="group/care relative">
+            <Link href={`/${lang}/info/delivery`} className="lnk tap">
+              {t.footer.care}
+            </Link>
+
+            <div className="invisible absolute start-0 top-full z-10 -translate-y-1 opacity-0 transition-[opacity,translate,visibility] duration-[var(--dur)] ease-[var(--ease-brand)] group-focus-within/care:visible group-focus-within/care:translate-y-0 group-focus-within/care:opacity-100 group-hover/care:visible group-hover/care:translate-y-0 group-hover/care:opacity-100">
+              <ul className="mt-px flex w-max flex-col gap-1 border border-[var(--color-rule)] bg-[var(--color-paper)] p-7">
+                {care.map((l) => (
+                  <li key={l.href}>
+                    <Link href={l.href} className="lnk tap-sm block py-1">
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </nav>
 
         <div className="t-nav ms-auto flex items-center gap-5">
@@ -143,7 +198,19 @@ export function Header({ lang }: { lang: Locale }) {
               </li>
             ))}
           </ul>
-          <div className="t-nav border-b border-[var(--color-rule)] py-4">
+          {/* На телефоне панели нет — служебные ссылки идут списком сразу
+              под основными, мелким кеглем: это не витрина, а справка. */}
+          <ul className="t-nav pt-4">
+            {care.map((l) => (
+              <li key={l.href}>
+                <Link href={l.href} className="lnk tap block py-2" onClick={() => setOpen(false)}>
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          <div className="t-nav border-y border-[var(--color-rule)] py-4">
             <SignIn lang={lang} />
           </div>
           <div className="pt-6">

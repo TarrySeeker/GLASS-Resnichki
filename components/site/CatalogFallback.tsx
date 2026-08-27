@@ -72,15 +72,16 @@ export function CatalogFallback({ lang }: { lang: Locale }) {
       </div>
 
       <div className="wrap pt-10">
-        <div className="grid grid-cols-2 content-start gap-x-4 gap-y-12 sm:gap-x-6 md:grid-cols-3 lg:grid-cols-4">
+        <div className="grid grid-cols-12 content-start gap-x-[var(--col-gap)] gap-y-12">
           {all.map((p, i) => (
-            <ProductCard
-              key={p.id}
-              product={p}
-              lang={lang}
-              priority={i < 4}
-              sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 22vw"
-            />
+            <div key={p.id} className="col-span-6 md:col-span-4 lg:col-span-3">
+              <ProductCard
+                product={p}
+                lang={lang}
+                priority={i < 4}
+                sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 22vw"
+              />
+            </div>
           ))}
         </div>
       </div>

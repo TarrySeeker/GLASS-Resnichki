@@ -29,14 +29,14 @@ export function CollectionsRow({ lang }: { lang: Locale }) {
       <div className="wrap">
         <h2 className="t-h2">{t.blocks.looksTitle}</h2>
 
-        <ul className="mt-10 grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 lg:grid-cols-4">
+        <ul className="mt-10 grid grid-cols-12 gap-x-[var(--col-gap)] gap-y-8">
           {t.blocks.looks.map((look, i) => {
             const source = LOOKS[i]
             if (!source) return null
             const count = lookCount(source)
 
             return (
-              <li key={look.name}>
+              <li key={look.name} className="col-span-6 lg:col-span-3">
                 {/* Прокрутка к сетке — весь смысл перехода: без неё человек
                     остаётся на том же экране, и выбор коллекции выглядит
                     нажатием, которое ничего не сделало. */}

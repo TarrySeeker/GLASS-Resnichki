@@ -285,9 +285,13 @@ export default async function ProductPage({
           <section className="sec">
             <div className="wrap">
               <h2 className="t-h2 rise">{t.product.related}</h2>
-              <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 lg:grid-cols-4">
+              <div className="mt-8 grid grid-cols-12 gap-x-[var(--col-gap)] gap-y-10">
                 {related.map((p, i) => (
-                  <div key={p.id} className="rise" data-rise-delay={`${i * 70}ms`}>
+                  <div
+                    key={p.id}
+                    className="rise col-span-6 lg:col-span-3"
+                    data-rise-delay={`${i * 70}ms`}
+                  >
                     <ProductCard product={p} lang={lang} />
                   </div>
                 ))}

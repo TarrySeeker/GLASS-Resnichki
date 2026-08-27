@@ -47,10 +47,14 @@ export function RecentlyViewed({ slug, lang }: { slug: string; lang: Locale }) {
     <section className="sec border-t border-[var(--color-rule)]">
       <div className="wrap">
         <h2 className="t-h2">{t.product.recent}</h2>
-        <div className="mt-8 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 lg:grid-cols-4">
+        <div className="mt-8 grid grid-cols-12 gap-x-[var(--col-gap)] gap-y-10">
           {slugs.map((s) => {
             const p = PRODUCTS.find((x) => x.slug === s)
-            return p ? <ProductCard key={p.id} product={p} lang={lang} /> : null
+            return p ? (
+              <div key={p.id} className="col-span-6 lg:col-span-3">
+                <ProductCard product={p} lang={lang} />
+              </div>
+            ) : null
           })}
         </div>
       </div>

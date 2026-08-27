@@ -68,9 +68,9 @@ export function Footer({ lang }: { lang: Locale }) {
   return (
     <>
       <section className="border-y border-[var(--color-rule)]">
-        <ul className="wrap grid gap-4 py-6 sm:grid-cols-3">
+        <ul className="wrap grid gap-y-4 py-6 sm:grid-cols-12 sm:gap-x-[var(--col-gap)]">
           {promise.map((line) => (
-            <li key={line} className="t-label t-muted">
+            <li key={line} className="t-label t-muted sm:col-span-4">
               {line}
             </li>
           ))}

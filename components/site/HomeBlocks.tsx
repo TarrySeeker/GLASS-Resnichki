@@ -108,12 +108,12 @@ export function LooksBlock({ lang }: { lang: Locale }) {
             и ломали подписи по слогам — «мягкий, / незаметный». Лентой они
             встают в одну строку, каждая вдвое шире, подписи не переносятся.
             С 1024 лента разворачивается в прежний ряд из четырёх. */}
-        <ul className="mrail rail-looks mt-10 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-8 lg:grid-cols-4">
+        <ul className="mrail rail-looks mt-10 sm:grid sm:grid-cols-12 sm:gap-x-[var(--col-gap)] sm:gap-y-8">
           {t.blocks.looks.map((look, i) => {
             const source = LOOKS[i]
             if (!source) return null
             return (
-              <li key={look.name}>
+              <li key={look.name} className="sm:col-span-6 lg:col-span-3">
                 <Link href={`/${lang}/catalog?${lookQuery(source)}`} className="group block">
                   {/* Квадрат, а не 3/4: съёмка квадратная, и в вертикальной
                       плитке упаковку срезало по бокам. */}
@@ -191,12 +191,12 @@ export function RealLifeBlock({ lang }: { lang: Locale }) {
         <ol
           tabIndex={0}
           aria-label={t.blocks.realTitle}
-          className="mrail rail-cards mt-10 sm:grid sm:grid-cols-2 sm:gap-6 lg:grid-cols-4"
+          className="mrail rail-cards mt-10 sm:grid sm:grid-cols-12 sm:gap-x-[var(--col-gap)] sm:gap-y-6"
         >
           {t.blocks.realSteps.map((step, i) => {
             const shot = SHOTS[i]
             return (
-              <li key={step}>
+              <li key={step} className="sm:col-span-6 lg:col-span-3">
                 <div className="aspect-[3/4]">
                   {shot && 'src' in shot ? (
                     <Clip src={shot.src} poster={shot.poster} label={step} />
@@ -245,7 +245,7 @@ export function WhyBlock({ lang }: { lang: Locale }) {
           {t.blocks.why.map((f) => (
             <div
               key={f.title}
-              className="grid gap-2 border-t border-[var(--color-rule)] py-6 sm:grid-cols-12 sm:gap-8"
+              className="grid gap-2 border-t border-[var(--color-rule)] py-6 sm:grid-cols-12 sm:gap-x-[var(--col-gap)]"
             >
               <dt className="t-h3 sm:col-span-4">{f.title}</dt>
               <dd className="t-lead t-muted sm:col-span-7 sm:col-start-6">{f.body}</dd>
@@ -272,9 +272,9 @@ export function BeforeAfterBlock({ lang }: { lang: Locale }) {
           <p className="t-label t-muted max-w-sm">{t.blocks.baNote}</p>
         </div>
 
-        <div className="mt-10 grid grid-cols-2 gap-4 sm:gap-6">
+        <div className="mt-10 grid grid-cols-12 gap-x-[var(--col-gap)]">
           {[t.blocks.baBefore, t.blocks.baAfter].map((label) => (
-            <figure key={label}>
+            <figure key={label} className="col-span-6">
               <Slot label={label} className="aspect-[4/5] sm:aspect-[3/2]" />
               <figcaption className="t-label pt-3">{label}</figcaption>
             </figure>
@@ -446,11 +446,11 @@ export function ReviewsBlock({ lang }: { lang: Locale }) {
         {/* На телефоне остаётся одна рамка вместо трёх. Три одинаковых пустых
             кадра не говорят ничего сверх одного, а в столбик они дают
             полторы тысячи пикселей дырок в хвосте страницы. */}
-        <ul className="mt-10 grid gap-4 sm:grid-cols-3 sm:gap-6">
+        <ul className="mt-10 grid gap-y-4 sm:grid-cols-12 sm:gap-x-[var(--col-gap)]">
           {[0, 1, 2].map((i) => (
             <li
               key={i}
-              className={`border border-[var(--color-rule)] p-6 ${i > 0 ? 'hidden sm:block' : ''}`}
+              className={`border border-[var(--color-rule)] p-6 sm:col-span-4 ${i > 0 ? 'hidden sm:block' : ''}`}
             >
               <Slot label={BLANKS.review} className="aspect-square" />
               <p className="t-lead t-muted mt-5">{BLANKS.review}</p>
@@ -484,10 +484,10 @@ export function StepsBlock({ lang }: { lang: Locale }) {
         <ol
           tabIndex={0}
           aria-label={t.blocks.stepsTitle}
-          className="mrail rail-looks mt-10 sm:mt-12 sm:grid sm:grid-cols-3 sm:gap-8"
+          className="mrail rail-looks mt-10 sm:mt-12 sm:grid sm:grid-cols-12 sm:gap-x-[var(--col-gap)]"
         >
           {t.blocks.steps.map((s, i) => (
-            <li key={s.title} className="border-t border-[var(--color-rule-ink)] pt-6">
+            <li key={s.title} className="border-t border-[var(--color-rule-ink)] pt-6 sm:col-span-4">
               <p className="t-hero" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)' }}>
                 {String(i + 1).padStart(2, '0')}
               </p>
