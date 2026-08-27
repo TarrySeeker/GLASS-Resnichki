@@ -170,7 +170,7 @@ export default async function InfoPage({
                    свою меру держит сам. */
                 className={`[container-type:inline-size] lg:self-start ${
                   story
-                    ? 'max-w-[36em] lg:col-span-5 lg:col-start-7'
+                    ? 'max-w-[36em] lg:col-span-7 lg:col-start-6'
                     : wide
                       ? 'lg:col-span-12'
                       : 'max-w-[36em] lg:col-span-6'
@@ -257,21 +257,28 @@ export default async function InfoPage({
                   До 1024 кадра нет: там текст идёт во всю ширину, и картинка
                   над ним отодвинула бы ответ на вопрос, ради которого сюда
                   пришли. */}
-              {/* У бренда кадр стоит первым — слева, вплотную к тексту, через
-                  один гутер. Прижат он к концу своей полосы, а не к началу:
-                  прижатый к началу, он отъезжал бы влево и разрыв остался бы
-                  тем же, сколько колонок ему ни дай. Поля при этом сходятся:
-                  205 px слева до кадра и столько же справа после текста.
+              {/* У бренда кадр выходит за поле страницы и упирается в левый
+                  край окна. Отрицательное поле снимает отступ полосы, кадр
+                  прижат к началу — дальше влево уходить некуда.
+
+                  Расстояние до текста задано не гутером, а полем страницы:
+                  через кадр, вышедший из сетки, гутер в двадцать пикселей
+                  читался бы прижатым, а сто — та же мера, которой отбит от
+                  края весь остальной сайт. На 1440 кадр кончается около
+                  пятисотой точки, текст начинается на шестьсот двадцать пятой:
+                  между ними пустая колонка сетки.
 
                   У политики кадр справа и через пустую колонку: там текст
                   отвечает на вопрос, и кадр ему не пара, а соседство. */}
               {art ? (
               <div
                 className={`rise relative hidden lg:block ${
-                  story ? 'lg:col-span-6 lg:col-start-1 lg:row-start-1' : 'lg:col-span-5 lg:col-start-8'
+                  story
+                    ? 'lg:col-span-5 lg:col-start-1 lg:row-start-1 lg:-ms-[var(--gutter)]'
+                    : 'lg:col-span-5 lg:col-start-8'
                 }`}
               >
-                <span className={`absolute inset-0 flex ${story ? 'justify-end' : 'justify-end'}`}>
+                <span className={`absolute inset-0 flex ${story ? 'justify-start' : 'justify-end'}`}>
                   <Image
                     src={ART[slug].src}
                     alt=""
