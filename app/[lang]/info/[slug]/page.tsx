@@ -104,6 +104,7 @@ export default async function InfoPage({
                 ) : null}
 
                 {slug === 'contacts' ? <ContactList lang={lang} /> : null}
+                {slug === 'delivery' ? <DeliveryTable lang={lang} /> : null}
 
                 <Link href={`/${lang}/catalog`} className="btn btn-wide mt-10">
                   {t.cart.toShop}
@@ -115,6 +116,54 @@ export default async function InfoPage({
       </main>
       <Footer lang={lang} />
     </>
+  )
+}
+
+/**
+ * Способы доставки таблицей.
+ *
+ * Абзацы объясняют, почему для одной страны есть выбор, а для другой нет;
+ * таблица отвечает на вопрос «а конкретно мне». Строки те же три, что и в
+ * корзине, и заведены они там же — переставлять их надо в одном месте.
+ *
+ * Срок стоит заглушкой намеренно: его считает перевозчик по адресу, и любое
+ * число здесь было бы обещанием, которого бренд не давал.
+ *
+ * На телефоне это не таблица, а карточки: четыре колонки в 336 px не встают,
+ * а горизонтальная прокрутка ради трёх строк — плохая цена.
+ */
+function DeliveryTable({ lang }: { lang: Locale }) {
+  const page = CONTENT[lang].info.delivery
+
+  return (
+    <section className="mt-12">
+      <h2 className="t-h3">{page.methodsTitle}</h2>
+
+      {/* Список способов, а внутри каждого — свой <dl> с парами. Имя
+          перевозчика в общий <dl> не положить: там разрешены только dt, dd и
+          обёртка div вокруг них, и абзац посреди списка ломает разметку. */}
+      <ul className="mt-6">
+        {page.methods.map((m) => (
+          <li key={m.name} className="border-t border-[var(--color-rule)] py-5">
+            <p className="t-nav">{m.name}</p>
+            <dl className="mt-3 grid gap-x-8 gap-y-2 sm:grid-cols-3">
+              {(
+                [
+                  [page.methodsCols.zone, m.zone],
+                  [page.methodsCols.time, m.time],
+                  [page.methodsCols.cost, m.cost],
+                ] as const
+              ).map(([label, value]) => (
+                <div key={label}>
+                  <dt className="t-label t-muted">{label}</dt>
+                  <dd className="t-label pt-1">{value}</dd>
+                </div>
+              ))}
+            </dl>
+          </li>
+        ))}
+      </ul>
+    </section>
   )
 }
 

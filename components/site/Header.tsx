@@ -8,6 +8,7 @@ import type { Locale } from '@/lib/i18n'
 import { Switchers } from '@/components/site/Switchers'
 import { PromoBar } from '@/components/site/PromoBar'
 import { CartCount } from '@/components/site/CartCount'
+import { FavCount } from '@/components/site/FavCount'
 import { SearchPanel } from '@/components/site/SearchPanel'
 import { SignIn } from '@/components/site/SignIn'
 import { PRODUCTS } from '@/lib/catalog'
@@ -168,7 +169,10 @@ export function Header({ lang }: { lang: Locale }) {
         </nav>
 
         <div className="t-nav ms-auto flex items-center gap-5">
-          <div className="hidden lg:block">
+          {/* Язык и валюта прячутся до 1280: они же стоят в футере и в
+              мобильном меню, а в строке шапки занимают 110 px, которые нужнее
+              избранному. */}
+          <div className="hidden xl:block">
             <Switchers lang={lang} compact fields={['lang', 'currency']} />
           </div>
           {/* Настоящий поиск по сайту вместо ссылки на каталог. */}
@@ -180,6 +184,16 @@ export function Header({ lang }: { lang: Locale }) {
           <span className="hidden lg:inline-flex">
             <SignIn lang={lang} />
           </span>
+          {/* Сердце на карточке складывало товар в хранилище с самого начала,
+              но открыть отложенное было негде. Вход стоит рядом с корзиной:
+              это два одинаковых по смыслу списка, и ищут их в одном месте. */}
+          <Link
+            href={`/${lang}/favorites`}
+            className="lnk tap hidden whitespace-nowrap sm:inline-flex"
+          >
+            {t.nav.favorites}
+            <FavCount />
+          </Link>
           <Link href={`/${lang}/cart`} className="lnk tap whitespace-nowrap">
             {t.nav.cart}
             <span className="ms-1">
@@ -215,8 +229,16 @@ export function Header({ lang }: { lang: Locale }) {
             ))}
           </ul>
 
-          <div className="t-nav border-y border-[var(--color-rule)] py-4">
+          <div className="t-nav flex items-center gap-6 border-y border-[var(--color-rule)] py-4">
             <SignIn lang={lang} />
+            <Link
+              href={`/${lang}/favorites`}
+              className="lnk tap"
+              onClick={() => setOpen(false)}
+            >
+              {t.nav.favorites}
+              <FavCount />
+            </Link>
           </div>
           <div className="pt-6">
             <Switchers lang={lang} fields={['lang', 'currency']} />

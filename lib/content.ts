@@ -42,6 +42,8 @@ export const BLANKS = {
   inn: '— РЕКВИЗИТЫ —',
   /** Значение, которого у нас нет: материал, сертификат, порог доставки. */
   data: '— ДАННЫЕ —',
+  /** Срок доставки. Считает перевозчик по адресу, у нас его нет. */
+  term: '— СРОК —',
   /** Настоящий отзыв покупателя. Выдумывать отзывы бриф запрещает прямо. */
   review: '— ОТЗЫВ —',
 } as const
@@ -120,7 +122,15 @@ type Dict = {
   info: {
     about: { title: string; lead: string; body: string[] }
     contacts: { title: string; lead: string; phone: string }
-    delivery: { title: string; lead: string; body: string[] }
+    delivery: {
+      title: string
+      lead: string
+      body: string[]
+      /** Способы доставки таблицей: чем везут, куда, за сколько и почём. */
+      methodsTitle: string
+      methodsCols: { name: string; zone: string; time: string; cost: string }
+      methods: { name: string; zone: string; time: string; cost: string }[]
+    }
     returns: { title: string; lead: string; body: string[] }
     privacy: { title: string; lead: string; body: string[] }
   }
@@ -141,6 +151,8 @@ type Dict = {
     inStock: string
     outOfStock: string
     availability: string
+    /** Подпись кнопки возврата к началу списка. Читается только с экрана. */
+    toList: string
     price: string
     category: string
     length: string
@@ -193,6 +205,13 @@ type Dict = {
     specCountry: string
     specCountryValue: string
     specMaker: string
+  }
+  /** Избранное: страница со списком отмеченных товаров. */
+  favorites: {
+    title: string
+    lead: string
+    empty: string
+    emptyHint: string
   }
   cart: {
     title: string
@@ -441,10 +460,34 @@ const ru: Dict = {
       title: 'Доставка и оплата',
       lead: 'По России и СНГ — СДЭК. В остальные страны — Почта России.',
       body: [
-        'По России и странам СНГ посылку везёт СДЭК: до двери или до пункта выдачи. Стоимость считается на оформлении заказа по адресу.',
+        'Способ доставки выбирает не покупатель, а карта: СДЭК работает по России и странам СНГ, за их пределами посылку принимает только почта. Поэтому в корзине для одних стран есть выбор между курьером и пунктом выдачи, а для других — нет.',
+        'По России и странам СНГ посылку везёт СДЭК: до двери или до пункта выдачи. Пункт выдачи дешевле курьера и удобнее тем, кого не застать дома.',
         'СНГ здесь — это Беларусь, Казахстан, Азербайджан, Армения, Кыргызстан, Узбекистан и Таджикистан.',
-        'В Турцию, Испанию и ОАЭ заказ уходит Почтой России. Пункта выдачи там нет — только доставка по адресу, и сроки зависят от страны назначения.',
+        'В Турцию, Испанию и ОАЭ заказ уходит Почтой России. Пункта выдачи там нет — только доставка по адресу.',
+        'Стоимость и срок считает перевозчик по адресу, поэтому они появляются на оформлении, а не в карточке товара: до ввода адреса их не знает никто.',
         `Способы оплаты и порог бесплатной доставки: ${BLANKS.data}`,
+      ],
+      methodsTitle: 'Чем и куда',
+      methodsCols: { name: 'Перевозчик', zone: 'Куда', time: 'Срок', cost: 'Стоимость' },
+      methods: [
+        {
+          name: 'СДЭК — курьером',
+          zone: 'Россия и СНГ',
+          time: BLANKS.term,
+          cost: 'На оформлении, по адресу',
+        },
+        {
+          name: 'СДЭК — до пункта выдачи',
+          zone: 'Россия и СНГ',
+          time: BLANKS.term,
+          cost: 'На оформлении, ниже курьерской',
+        },
+        {
+          name: 'Почта России',
+          zone: 'Турция, Испания, ОАЭ',
+          time: BLANKS.term,
+          cost: 'На оформлении, по стране назначения',
+        },
       ],
     },
     returns: {
@@ -480,6 +523,7 @@ const ru: Dict = {
     reset: 'Сбросить',
     apply: 'Показать',
     found: 'Найдено',
+    toList: 'К началу списка',
     empty: 'Ничего не нашлось',
     emptyHint: 'Снимите часть фильтров или измените запрос.',
     inStock: 'В наличии',
@@ -533,6 +577,12 @@ const ru: Dict = {
     specCountry: 'Страна производства',
     specCountryValue: 'Китай',
     specMaker: 'Изготовитель',
+  },
+  favorites: {
+    title: 'Избранное',
+    lead: 'Отмеченное сердцем остаётся здесь — на этом устройстве, без регистрации.',
+    empty: 'Пока пусто',
+    emptyHint: 'Сердце на карточке товара откладывает его сюда.',
   },
   cart: {
     title: 'Корзина',
@@ -780,10 +830,34 @@ const en: Dict = {
       title: 'Shipping & payment',
       lead: 'CDEK across Russia and the CIS. Russian Post elsewhere.',
       body: [
-        'Across Russia and the CIS the parcel travels with CDEK, to your door or to a pickup point. The cost is calculated at checkout from the address.',
+        'The map picks the carrier, not the buyer: CDEK serves Russia and the CIS, and beyond them only the postal service accepts the parcel. That is why the cart offers a choice between a courier and a pickup point for some countries and not for others.',
+        'Across Russia and the CIS the parcel travels with CDEK, to your door or to a pickup point. A pickup point costs less than a courier and suits anyone hard to catch at home.',
         'The CIS here means Belarus, Kazakhstan, Azerbaijan, Armenia, Kyrgyzstan, Uzbekistan and Tajikistan.',
-        'To Türkiye, Spain and the UAE the order goes by Russian Post. There are no pickup points there — delivery is to the address, and the time depends on the destination.',
+        'To Türkiye, Spain and the UAE the order goes by Russian Post. There are no pickup points there — delivery is to the address.',
+        'The carrier works out the cost and the time from the address, which is why both appear at checkout rather than on the product page: until the address is in, nobody knows them.',
         `Payment methods and the free-shipping threshold: ${BLANKS.data}`,
+      ],
+      methodsTitle: 'What goes where',
+      methodsCols: { name: 'Carrier', zone: 'Where', time: 'Time', cost: 'Cost' },
+      methods: [
+        {
+          name: 'CDEK — courier',
+          zone: 'Russia and the CIS',
+          time: BLANKS.term,
+          cost: 'At checkout, from the address',
+        },
+        {
+          name: 'CDEK — pickup point',
+          zone: 'Russia and the CIS',
+          time: BLANKS.term,
+          cost: 'At checkout, below courier',
+        },
+        {
+          name: 'Russian Post',
+          zone: 'Türkiye, Spain, the UAE',
+          time: BLANKS.term,
+          cost: 'At checkout, by destination',
+        },
       ],
     },
     returns: {
@@ -819,6 +893,7 @@ const en: Dict = {
     reset: 'Clear',
     apply: 'Show',
     found: 'Found',
+    toList: 'Back to the top of the list',
     empty: 'Nothing found',
     emptyHint: 'Clear a filter or change the search.',
     inStock: 'In stock',
@@ -872,6 +947,12 @@ const en: Dict = {
     specCountry: 'Country of manufacture',
     specCountryValue: 'China',
     specMaker: 'Manufacturer',
+  },
+  favorites: {
+    title: 'Saved',
+    lead: 'Whatever you mark with a heart stays here — on this device, no sign-up needed.',
+    empty: 'Nothing here yet',
+    emptyHint: 'The heart on a product card puts it aside for you.',
   },
   cart: {
     title: 'Cart',
@@ -1119,10 +1200,34 @@ const ar: Dict = {
       title: 'الشحن والدفع',
       lead: 'CDEK داخل روسيا ورابطة الدول المستقلة. وبالبريد الروسي إلى بقية الدول.',
       body: [
-        'داخل روسيا ودول رابطة الدول المستقلة يصل الطرد عبر CDEK إلى الباب أو إلى نقطة استلام. وتُحتسب التكلفة عند إتمام الطلب حسب العنوان.',
+        'الخريطة هي التي تختار الناقل لا المشتري: CDEK يعمل داخل روسيا ورابطة الدول المستقلة، وخارجهما لا يقبل الطرد إلا البريد. لذلك تعرض السلة الاختيار بين مندوب ونقطة استلام في بعض الدول دون غيرها.',
+        'داخل روسيا ودول رابطة الدول المستقلة يصل الطرد عبر CDEK إلى الباب أو إلى نقطة استلام. ونقطة الاستلام أرخص من المندوب وأنسب لمن يصعب لقاؤه في البيت.',
         'ورابطة الدول المستقلة هنا هي بيلاروس وكازاخستان وأذربيجان وأرمينيا وقيرغيزستان وأوزبكستان وطاجيكستان.',
-        'وإلى تركيا وإسبانيا والإمارات يُرسَل الطلب بالبريد الروسي. ولا توجد هناك نقاط استلام — التوصيل إلى العنوان فقط، وتعتمد المدة على بلد الوصول.',
+        'وإلى تركيا وإسبانيا والإمارات يُرسَل الطلب بالبريد الروسي. ولا توجد هناك نقاط استلام — التوصيل إلى العنوان فقط.',
+        'الناقل يحسب التكلفة والمدة من العنوان، ولذلك تظهران عند إتمام الطلب لا في صفحة المنتج: قبل إدخال العنوان لا يعرفهما أحد.',
         `طرق الدفع وحدّ الشحن المجاني: ${BLANKS.data}`,
+      ],
+      methodsTitle: 'ماذا وإلى أين',
+      methodsCols: { name: 'الناقل', zone: 'إلى أين', time: 'المدة', cost: 'التكلفة' },
+      methods: [
+        {
+          name: 'CDEK — مندوب',
+          zone: 'روسيا ورابطة الدول المستقلة',
+          time: BLANKS.term,
+          cost: 'عند إتمام الطلب، حسب العنوان',
+        },
+        {
+          name: 'CDEK — نقطة استلام',
+          zone: 'روسيا ورابطة الدول المستقلة',
+          time: BLANKS.term,
+          cost: 'عند إتمام الطلب، أقل من المندوب',
+        },
+        {
+          name: 'البريد الروسي',
+          zone: 'تركيا وإسبانيا والإمارات',
+          time: BLANKS.term,
+          cost: 'عند إتمام الطلب، حسب بلد الوصول',
+        },
       ],
     },
     returns: {
@@ -1158,6 +1263,7 @@ const ar: Dict = {
     reset: 'مسح',
     apply: 'عرض',
     found: 'النتائج',
+    toList: 'إلى أول القائمة',
     empty: 'لا توجد نتائج',
     emptyHint: 'أزل بعض عوامل التصفية أو غيّر البحث.',
     inStock: 'متوفر',
@@ -1211,6 +1317,12 @@ const ar: Dict = {
     specCountry: 'بلد التصنيع',
     specCountryValue: 'الصين',
     specMaker: 'الجهة المصنّعة',
+  },
+  favorites: {
+    title: 'المفضلة',
+    lead: 'ما تضع عليه قلباً يبقى هنا — على هذا الجهاز، دون تسجيل.',
+    empty: 'لا شيء بعد',
+    emptyHint: 'القلب على بطاقة المنتج يضعه جانباً لك.',
   },
   cart: {
     title: 'السلة',

@@ -1675,3 +1675,58 @@ textarea.inp {
   border-style: solid;
   background: var(--color-tile);
 }
+
+/* ─── Возврат к началу списка ──────────────────────────────────────────────
+   Квадрат со стрелкой у нижнего края. Не круг: на витрине нет ни одного
+   скруглённого угла, и кружок читался бы деталью из чужой системы.
+
+   Плоскость чернильная, как у главной кнопки: это действие, а не ссылка.
+   Появляется и уходит сдвигом снизу вместе с прозрачностью — тем же ходом,
+   каким выезжают панели.                                                   */
+.to-list {
+  position: fixed;
+  inset-block-end: calc(1.25rem + env(safe-area-inset-bottom));
+  inset-inline-end: 1.25rem;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  inline-size: 3rem;
+  block-size: 3rem;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  opacity: 0;
+  translate: 0 1rem;
+  pointer-events: none;
+  transition:
+    opacity var(--dur) var(--ease-brand),
+    translate var(--dur) var(--ease-brand);
+}
+
+.to-list[data-show='true'] {
+  opacity: 1;
+  translate: 0 0;
+  pointer-events: auto;
+}
+
+@media (min-width: 1024px) {
+  .to-list {
+    inset-block-end: 2rem;
+    inset-inline-end: 2rem;
+  }
+}
+
+/* Стрелка: половина рамки квадрата, повёрнутая на 45°. */
+.to-list-arrow {
+  inline-size: 0.6rem;
+  block-size: 0.6rem;
+  border-block-start: 1px solid currentColor;
+  border-inline-start: 1px solid currentColor;
+  rotate: 45deg;
+  translate: 0 0.15em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .to-list {
+    transition-duration: 0.01ms;
+  }
+}

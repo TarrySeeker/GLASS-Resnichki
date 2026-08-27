@@ -10,6 +10,7 @@ import { useStore } from '@/components/StoreProvider'
 import { ProductCard } from '@/components/site/ProductCard'
 import { SuggestRow } from '@/components/site/SuggestRow'
 import { Select } from '@/components/site/Select'
+import { BackToList } from '@/components/site/BackToList'
 import { searchProducts, matchProduct } from '@/lib/search'
 
 /**
@@ -432,6 +433,11 @@ export function CatalogView({ lang }: { lang: Locale }) {
           </div>
         ) : null}
       </div>
+
+      {/* Разделы каталога не уводят на отдельные страницы, а подводят к этой
+          же сетке — и оставляют человека внизу длинного списка. Кнопка
+          возвращает к его началу, где стоят и заголовок, и фильтр. */}
+      <BackToList label={t.catalog.toList} />
 
       <div className="wrap anchor-grid pt-10" id="catalog">
         <h2 className="sr-only">{t.catalog.found}</h2>

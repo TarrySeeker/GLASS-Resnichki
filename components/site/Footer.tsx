@@ -62,7 +62,11 @@ export function Footer({ lang }: { lang: Locale }) {
   ]
 
   /* Полоса условий над футером: три строки того, что известно наверняка.
-     Гарантий и обещаний, которых бренд не давал, здесь нет. */
+     Гарантий и обещаний, которых бренд не давал, здесь нет.
+
+     Каждая ведёт на страницу доставки. Строка «СДЭК по России и СНГ» сама по
+     себе вызывает вопрос — почему СДЭК и почему не везде, — и ответ должен
+     быть в одном нажатии от вопроса, а не в футере через три экрана. */
   const promise = [t.promise.shipping, t.promise.worldwide, t.promise.cost]
 
   return (
@@ -70,8 +74,13 @@ export function Footer({ lang }: { lang: Locale }) {
       <section className="border-y border-[var(--color-rule)]">
         <ul className="wrap grid gap-y-4 py-6 sm:grid-cols-12 sm:gap-x-[var(--col-gap)]">
           {promise.map((line) => (
-            <li key={line} className="t-label t-muted sm:col-span-4">
-              {line}
+            <li key={line} className="sm:col-span-4">
+              <Link
+                href={`/${lang}/info/delivery`}
+                className="lnk tap t-label t-muted inline-flex"
+              >
+                {line}
+              </Link>
             </li>
           ))}
         </ul>

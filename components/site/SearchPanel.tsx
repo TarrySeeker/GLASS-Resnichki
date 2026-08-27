@@ -102,7 +102,11 @@ export function SearchPanel({ lang }: { lang: Locale }) {
         }}
         className="fixed top-0 start-0 end-0 m-0 max-h-[100dvh] w-full max-w-none border-0 bg-[var(--color-paper)] p-0 text-[var(--color-ink)]"
       >
-        <div className="wrap flex max-h-[100dvh] flex-col">
+        {/* Отступ сверху обязателен: панель выезжает от нуля, и поле вставало
+            вплотную к кромке окна — под адресной строкой браузера, без воздуха
+            над собой. Сверху столько же, сколько высота шапки, из которой
+            поиск вызывают: полоса будто остаётся на месте. */}
+        <div className="wrap flex max-h-[100dvh] flex-col pt-6 lg:pt-8">
           <div className="flex items-center gap-4 border-b border-[var(--color-rule)]">
             <input
               ref={field}

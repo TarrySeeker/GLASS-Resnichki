@@ -45,6 +45,12 @@ export function SignIn({ lang }: { lang: Locale }) {
       <dialog
         ref={ref}
         aria-label={isNew ? a.signUp : a.signIn}
+        /* Нажатие мимо панели закрывает её. Сама панель — прозрачная плоскость
+           во весь экран, а видимая часть лежит внутри; клик приходит на
+           <dialog> только если он пришёлся в прозрачное, то есть мимо. */
+        onClick={(e) => {
+          if (e.target === ref.current) ref.current?.close()
+        }}
         className="drawer fixed inset-0 m-0 h-full max-h-none w-full max-w-none flex-col border-0 bg-transparent p-0 text-[var(--color-ink)] open:flex"
       >
         <div className="mt-auto bg-[var(--color-paper)] lg:m-auto lg:w-full lg:max-w-md">

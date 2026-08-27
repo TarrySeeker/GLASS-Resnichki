@@ -164,6 +164,9 @@ export function AccountAddresses({ lang }: { lang: Locale }) {
       <dialog
         ref={sheet}
         aria-label={t.addresses.add}
+        onClick={(e) => {
+          if (e.target === sheet.current) sheet.current?.close()
+        }}
         className="drawer fixed inset-0 m-0 h-full max-h-none w-full max-w-none flex-col border-0 bg-transparent p-0 text-[var(--color-ink)] open:flex"
       >
         <form
