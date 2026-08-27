@@ -71,7 +71,11 @@ export function FeatureBlock({ lang }: { lang: Locale }) {
           </Link>
         </div>
 
-        <div className="lg:col-span-4 lg:col-start-9">
+        {/* Пять колонок, а не четыре: в четырёх «MODERN BRIDE» не встаёт в
+            строку и рвётся между словами, а название линейки — то, ради чего
+            блок здесь стоит. Правый край держится за край сетки, слева
+            остаётся пустая колонка между кадром и текстом. */}
+        <div className="lg:col-span-5 lg:col-start-8">
           <p className="t-label t-muted">{t.blocks.featureKicker}</p>
           <h2 className="t-h2 mt-4">
             <Link href={href} className="lnk">

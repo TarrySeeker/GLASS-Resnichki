@@ -90,7 +90,7 @@ export function Header({ lang }: { lang: Locale }) {
           />
         </Link>
 
-        <nav aria-label={t.nav.menu} className="t-nav ms-6 hidden items-center gap-5 whitespace-nowrap lg:flex xl:ms-8 xl:gap-7">
+        <nav aria-label={t.nav.menu} className="t-nav ms-6 hidden items-center gap-5 whitespace-nowrap lg:flex xl:ms-8">
           <div className="group/nav relative">
             <Link href={`/${lang}/catalog`} className="lnk tap">
               {t.nav.shop}
@@ -102,7 +102,7 @@ export function Header({ lang }: { lang: Locale }) {
                 <p className="t-label t-muted">{t.blocks.collectionsTitle}</p>
 
                 <ul className="flex flex-col gap-1">
-                  {links.slice(1, 4).map((l) => (
+                  {links.slice(1).map((l) => (
                     <li key={l.href}>
                       <Link href={l.href} className="lnk tap-sm block py-1">
                         {l.label}
@@ -124,26 +124,31 @@ export function Header({ lang }: { lang: Locale }) {
             </div>
           </div>
 
-          {/* Три ссылки на разделы каталога прячутся до 1280: они и так лежат
-              в панели «Каталог» слева, а в строке шапки на 1024 занимают
-              320 px, которых там нет — правый край с поиском и корзиной
-              вылезал за экран на сотню пикселей. «О бренде» остаётся: этой
-              страницы в панели нет. */}
-          {links.slice(1).map((l, i) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              className={`lnk tap ${i < 3 ? 'hidden xl:inline-flex' : ''}`}
-            >
+          {/* Разделы каталога живут в плашке слева и в строке не повторяются:
+              вместе с «О бренде» они занимали 400 px, а на 1024 их вовсе не
+              было куда поставить. «О бренде» возвращается в строку с 1536,
+              где место есть; ниже он там же, в плашке. */}
+          <Link href={`/${lang}/info/about`} className="lnk tap hidden 2xl:inline-flex">
+            {t.nav.about}
+          </Link>
+
+          {/* Служебные разделы стоят в строке ссылками, а не за словом
+              «Помощь»: вопрос «когда приедет и как вернуть» задают до покупки,
+              и лишнее наведение на пути к ответу здесь ни к чему.
+
+              Три из четырёх: «Конфиденциальность» набором шапки требует
+              207 px — с ней строка перестаёт помещаться даже на 1536. Это
+              юридическая страница, её место в футере, где она и осталась.
+
+              Ниже 1280 в строке нет места и на три, поэтому там они
+              сворачиваются в ту же плашку, что была раньше. */}
+          {care.slice(0, 3).map((l) => (
+            <Link key={l.href} href={l.href} className="lnk tap hidden xl:inline-flex">
               {l.label}
             </Link>
           ))}
 
-          {/* Помощь — такая же панель, как у каталога, и по той же причине:
-              четыре служебные ссылки в одну строку шапки не встают, а прятать
-              их в футер значит прятать ответ на вопрос, который задают до
-              покупки. Состояния в JS нет: раскрывает наведение и фокус. */}
-          <div className="group/care relative">
+          <div className="group/care relative xl:hidden">
             <Link href={`/${lang}/info/delivery`} className="lnk tap">
               {t.footer.care}
             </Link>
