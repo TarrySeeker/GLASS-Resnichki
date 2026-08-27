@@ -50,13 +50,13 @@ const CTA: Record<InfoSlug, { href: (l: Locale) => string; label: (t: Copy) => s
  * ширину раньше, чем добирает высоту, и снизу с верхом остаются поля — та
  * самая пустота внутри рамки, которой здесь быть не должно.
  *
- * Отсюда и разные формы: под длинный текст доставки — вертикаль 4:5, под
- * короткий текст политики — лежачий 4:3, под буклет — квадрат.
+ * Отсюда и разные формы: под короткий текст доставки и политики — лежачий
+ * 4:3, под буклет контактов — квадрат, под рассказ о бренде — вертикаль.
  */
 const ART: Record<InfoSlug, { src: string; w: number; h: number }> = {
-  about: { src: '/media/about.jpg', w: 1000, h: 1333 },
+  about: { src: '/media/about.jpg', w: 1000, h: 1408 },
   contacts: { src: '/media/info-contacts.jpg', w: 1200, h: 1200 },
-  delivery: { src: '/media/info-delivery.jpg', w: 1000, h: 1250 },
+  delivery: { src: '/media/info-delivery.jpg', w: 1333, h: 1000 },
   returns: { src: '/media/info-returns.jpg', w: 1333, h: 1000 },
   privacy: { src: '/media/info-privacy.jpg', w: 1333, h: 1000 },
 }
@@ -222,17 +222,14 @@ export default async function InfoPage({
                   доставки — закрытая коробка, у возврата она же открытая, у
                   контактов — буклет бренда, у политики — закрытая коробочка. О
                   бренде говорит съёмка с моделями: это единственная страница,
-                  где речь о людях, а не о посылке.
+                  где речь о людях, а не о посылке. Её пропорция подобрана под
+                  свой блок отдельно: со строкой бренда он выше остальных.
 
                   До 1024 кадра нет: там текст идёт во всю ширину, и картинка
                   над ним отодвинула бы ответ на вопрос, ради которого сюда
                   пришли. */}
-              <div
-                className={`rise relative hidden lg:block ${
-                  story ? 'lg:col-span-5 lg:col-start-8 lg:self-center' : 'lg:col-span-5 lg:col-start-8'
-                }`}
-              >
-                <span className={story ? 'block' : 'absolute inset-0 flex justify-end'}>
+              <div className="rise relative hidden lg:col-span-5 lg:col-start-8 lg:block">
+                <span className="absolute inset-0 flex justify-end">
                   <Image
                     src={ART[slug].src}
                     alt=""
@@ -242,11 +239,7 @@ export default async function InfoPage({
                     /* Вверх, а не по центру: если ширина колонки не даёт
                        набрать полную высоту, недобор уходит вниз одним полем,
                        а не двумя по краям. */
-                    className={
-                      story
-                        ? 'block h-auto w-full'
-                        : 'h-full w-auto max-w-full object-contain object-top'
-                    }
+                    className="h-full w-auto max-w-full object-contain object-top"
                   />
                 </span>
               </div>
