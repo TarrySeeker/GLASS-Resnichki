@@ -174,7 +174,10 @@ export function SearchPanel({ lang, label = false }: { lang: Locale; label?: boo
             )}
           </div>
 
-          {typed ? (
+          {/* Ссылка на полную выдачу пропадает, когда искать в ней нечего:
+              при нуле найденных она вела в каталог с тем же запросом и тем же
+              нулём — действие, которое ничего не меняет. */}
+          {typed && results.length > 0 ? (
             <div className="border-t border-[var(--color-rule)]">
               <Link href={allHref} className="t-nav lnk tap py-2" onClick={close}>
                 {t.search.all}

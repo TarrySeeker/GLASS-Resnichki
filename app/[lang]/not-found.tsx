@@ -23,9 +23,14 @@ export default function NotFound() {
           <p className="t-hero">404</p>
           <h1 className="t-h2 mt-6">{t.notFound.title}</h1>
           <p className="t-lead t-muted mt-4">{t.notFound.note}</p>
-          <Link href={`/${lang}/catalog`} className="btn mt-10">
-            {t.notFound.cta}
-          </Link>
+          <div className="mt-10 flex flex-wrap gap-4">
+            <Link href={`/${lang}/catalog`} className="btn">
+              {t.notFound.cta}
+            </Link>
+            <Link href={`/${lang}`} className="btn btn-ghost">
+              {t.notFound.home}
+            </Link>
+          </div>
         </section>
       </main>
       <Footer lang={lang} />

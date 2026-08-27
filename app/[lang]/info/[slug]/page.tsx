@@ -193,7 +193,7 @@ function ContactList({ lang }: { lang: Locale }) {
   const rows = [
     { label: t.info.contacts.phone, value: BLANKS.phone },
     { label: 'E-mail', value: BLANKS.email },
-    { label: t.footer.contacts, value: BLANKS.address },
+    { label: t.info.contacts.address, value: BLANKS.address },
     /* Изготовитель — настоящее юридическое имя, а не заглушка реквизитов:
        эти сведения обязательны для товара и известны точно. Остальные
        реквизиты (ИНН, адрес) ждут своей строки. */

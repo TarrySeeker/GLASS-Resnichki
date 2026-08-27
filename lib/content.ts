@@ -121,7 +121,7 @@ type Dict = {
   }
   info: {
     about: { title: string; lead: string; body: string[] }
-    contacts: { title: string; lead: string; phone: string }
+    contacts: { title: string; lead: string; phone: string; address: string }
     delivery: {
       title: string
       lead: string
@@ -134,7 +134,7 @@ type Dict = {
     returns: { title: string; lead: string; body: string[] }
     privacy: { title: string; lead: string; body: string[] }
   }
-  notFound: { title: string; note: string; cta: string }
+  notFound: { title: string; note: string; cta: string; home: string }
   catalog: {
     title: string
     filters: string
@@ -269,6 +269,8 @@ type Dict = {
     subscribeOk: string
     /** Сервис рассылки не подключён — говорим это прямо, а не молчим. */
     subscribeOff: string
+    /** Адрес не похож на адрес. Своя строка вместо системной подсказки браузера. */
+    subscribeBad: string
   }
   /**
    * Личный кабинет. Пока это только раскладка: сервера за ней нет, и
@@ -455,6 +457,7 @@ const ru: Dict = {
       title: 'Контакты',
       lead: 'Пишите по любому вопросу — ответим в рабочее время.',
       phone: 'Телефон',
+      address: 'Адрес',
     },
     delivery: {
       title: 'Доставка и оплата',
@@ -511,6 +514,7 @@ const ru: Dict = {
     title: 'Страницы нет',
     note: 'Ссылка устарела или в адресе опечатка.',
     cta: 'В каталог',
+    home: 'На главную',
   },
   catalog: {
     title: 'Каталог',
@@ -641,6 +645,7 @@ const ru: Dict = {
     subscribeCta: 'Подписаться',
     subscribeOk: 'Готово. Проверьте почту.',
     subscribeOff: 'Рассылка ещё не подключена.',
+    subscribeBad: 'Проверьте адрес: похоже, в нём опечатка.',
   },
   account: {
     title: 'Кабинет',
@@ -825,6 +830,7 @@ const en: Dict = {
       title: 'Contact',
       lead: 'Write to us about anything — we answer during working hours.',
       phone: 'Phone',
+      address: 'Address',
     },
     delivery: {
       title: 'Shipping & payment',
@@ -881,6 +887,7 @@ const en: Dict = {
     title: 'Page not found',
     note: 'The link is outdated or the address has a typo.',
     cta: 'Go to shop',
+    home: 'Home',
   },
   catalog: {
     title: 'Shop',
@@ -1011,6 +1018,7 @@ const en: Dict = {
     subscribeCta: 'Subscribe',
     subscribeOk: 'Done. Check your inbox.',
     subscribeOff: 'The mailing list is not connected yet.',
+    subscribeBad: 'Check the address — it looks like a typo.',
   },
   account: {
     title: 'Account',
@@ -1195,6 +1203,7 @@ const ar: Dict = {
       title: 'التواصل',
       lead: 'اكتبي إلينا في أي أمر — نردّ خلال ساعات العمل.',
       phone: 'الهاتف',
+      address: 'العنوان',
     },
     delivery: {
       title: 'الشحن والدفع',
@@ -1251,6 +1260,7 @@ const ar: Dict = {
     title: 'الصفحة غير موجودة',
     note: 'الرابط قديم أو في العنوان خطأ إملائي.',
     cta: 'إلى المتجر',
+    home: 'الرئيسية',
   },
   catalog: {
     title: 'المتجر',
@@ -1381,6 +1391,7 @@ const ar: Dict = {
     subscribeCta: 'اشتراك',
     subscribeOk: 'تم. تفقّدي بريدكِ.',
     subscribeOff: 'القائمة البريدية غير مفعّلة بعد.',
+    subscribeBad: 'تحقّقي من العنوان — يبدو أن فيه خطأً.',
   },
   account: {
     title: 'حسابي',

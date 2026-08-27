@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { COUNTRIES, type Currency, type Locale, formatPrice, pickCountry } from '@/lib/i18n'
+import { PRODUCTS } from '@/lib/catalog'
 import { PRICE_BLANK } from '@/lib/content'
 
 /**
@@ -81,8 +82,23 @@ export function StoreProvider({ locale, children }: { locale: Locale; children: 
       }
       if (raw) {
         const s = JSON.parse(raw)
-        if (Array.isArray(s.cart)) setCart(s.cart)
-        if (Array.isArray(s.favorites)) setFavorites(s.favorites)
+        // Строки, которым больше нечего соответствовать, выбрасываются при
+        // чтении. Ассортимент меняется, а корзина живёт в браузере годами: без
+        // этой чистки счётчик в шапке продолжал считать снятый с продажи
+        // артикул, страница корзины показывала «пусто», и убрать его было
+        // нечем — кнопки «убрать» у невидимой строки нет.
+        if (Array.isArray(s.cart)) {
+          setCart(
+            (s.cart as CartLine[]).filter((l) =>
+              PRODUCTS.some((p) => p.id === l.id && p.variants.some((v) => v.sku === l.variant)),
+            ),
+          )
+        }
+        // То же и с избранным: отметка на исчезнувшем товаре открывается в
+        // пустой список и снять её невозможно.
+        if (Array.isArray(s.favorites)) {
+          setFavorites((s.favorites as string[]).filter((id) => PRODUCTS.some((p) => p.id === id)))
+        }
         if (typeof s.currency === 'string') setCurrency(s.currency)
         if (typeof s.country === 'string') setCountryState(s.country)
         if (typeof s.promo === 'string') setPromo(s.promo)

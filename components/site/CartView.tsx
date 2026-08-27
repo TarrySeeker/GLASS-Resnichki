@@ -258,7 +258,11 @@ export function CartView({ lang }: { lang: Locale }) {
                   aria-invalid={promoError}
                   aria-describedby={promoError ? 'promo-error' : undefined}
                 />
-                <button type="submit" className="btn px-5" disabled={!code.trim()}>
+                {/* Кнопка не гаснет на пустом поле — как и у подписки:
+                    погашенная кнопка встречает человека серым прямоугольником
+                    и читается сломанной, а пустой промокод и так не подойдёт и
+                    скажет об этом словами. */}
+                <button type="submit" className="btn px-5">
                   {t.cart.promoApply}
                 </button>
               </div>

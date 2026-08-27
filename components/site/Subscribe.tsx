@@ -15,6 +15,12 @@ import type { Locale } from '@/lib/i18n'
  * «рассылка ещё не подключена» — последнее приходит от ручки, когда сервис
  * не задан. Показывать «спасибо, вы подписаны» в этом случае нельзя.
  *
+ * Адрес проверяется здесь, а не браузером. С `required` и `type="email"`
+ * браузер перехватывал отправку раньше формы и показывал системную жёлтую
+ * подсказку — единственный элемент на витрине, нарисованный не нами, и
+ * единственное сообщение не нашими словами. Своё состояние ошибки при этом
+ * не срабатывало никогда и лежало мёртвым кодом.
+ *
  * Заголовок и подпись живут снаружи: в футере они стоят слева, а поле —
  * справа, и держать их в одном компоненте значило бы держать в одной колонке.
  * Имя полю даёт этот заголовок через aria-labelledby, поэтому подпись не
@@ -28,12 +34,26 @@ export function Subscribe({ lang, labelledBy }: { lang: Locale; labelledBy: stri
   const [state, setState] = useState<State>('idle')
 
   const message =
-    state === 'ok' ? t.footer.subscribeOk : state === 'off' ? t.footer.subscribeOff : state === 'bad' ? t.cart.promoBad : ''
+    state === 'ok'
+      ? t.footer.subscribeOk
+      : state === 'off'
+        ? t.footer.subscribeOff
+        : state === 'bad'
+          ? t.footer.subscribeBad
+          : ''
 
   return (
     <form
+      noValidate
       onSubmit={async (e) => {
         e.preventDefault()
+        // Проверка нарочно грубая: точную правильность адреса знает только
+        // письмо, которое по нему дойдёт. Здесь ловится опечатка, а не
+        // соответствие RFC, и цена ошибки — одна лишняя строка под полем.
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())) {
+          setState('bad')
+          return
+        }
         setState('sending')
         try {
           const res = await fetch('/api/subscribe', {
@@ -44,7 +64,7 @@ export function Subscribe({ lang, labelledBy }: { lang: Locale; labelledBy: stri
           if (res.ok) {
             setState('ok')
             setEmail('')
-          } else setState(res.status === 501 ? 'off' : 'bad')
+          } else setState('off')
         } catch {
           setState('off')
         }
@@ -58,7 +78,6 @@ export function Subscribe({ lang, labelledBy }: { lang: Locale; labelledBy: stri
         <input
           id="subscribe-email"
           type="email"
-          required
           aria-labelledby={labelledBy}
           autoComplete="email"
           value={email}
