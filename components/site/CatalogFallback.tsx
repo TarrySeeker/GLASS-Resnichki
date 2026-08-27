@@ -25,7 +25,7 @@ export function CatalogFallback({ lang }: { lang: Locale }) {
 
   return (
     <>
-      <div className="filter-bar">
+      <div className="filter-bar on-ink">
         <div className="wrap flex flex-col gap-2 py-2 sm:flex-row sm:items-center sm:gap-x-6 sm:py-3">
           <div className="flex items-center gap-3 sm:contents">
             <div className="relative order-1 min-w-0 flex-1 sm:max-w-sm sm:flex-none sm:basis-64">
@@ -35,7 +35,7 @@ export function CatalogFallback({ lang }: { lang: Locale }) {
                   type="search"
                   disabled
                   placeholder={t.nav.searchHint}
-                  className="t-nav w-full border-b border-[var(--color-rule)] bg-transparent py-2 placeholder:text-[var(--color-muted)]"
+                  className="t-nav w-full border-b border-[var(--color-rule-ink)] bg-transparent py-2"
                 />
               </label>
             </div>
@@ -49,7 +49,7 @@ export function CatalogFallback({ lang }: { lang: Locale }) {
             <button
               type="button"
               disabled
-              className="t-nav tap order-2 shrink-0 border border-[var(--color-ink)] px-4"
+              className="t-nav tap order-2 shrink-0 border border-current px-4"
             >
               {t.catalog.filters}
             </button>

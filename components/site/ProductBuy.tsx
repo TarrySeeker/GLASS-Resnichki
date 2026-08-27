@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useState } from 'react'
 import { CONTENT } from '@/lib/content'
 import { formatLength, type Locale } from '@/lib/i18n'
@@ -14,39 +15,45 @@ import { useStore } from '@/components/StoreProvider'
  */
 export function ProductBuy({ product, lang }: { product: Product; lang: Locale }) {
   const t = CONTENT[lang]
-  const { add, price } = useStore()
+  const { add, price, cart } = useStore()
 
   // Стартуем с первого доступного варианта: предвыбранный «нет в наличии»
   // выглядит как поломка. Если нет ни одного — остаёмся на первом.
   const first = product.variants.findIndex((v) => v.inStock)
   const [sel, setSel] = useState(first === -1 ? 0 : first)
-  const [added, setAdded] = useState(false)
 
   const variant = product.variants[sel]
+  /* «В корзине» — не память кнопки, а состояние корзины: после перезагрузки
+     страницы кнопка обязана показывать то же самое, что показывает счётчик в
+     шапке. Строка ищется по паре товар-артикул: другая длина той же линейки —
+     другая строка, и статус у неё свой. */
+  const inCart = cart.some((l) => l.id === product.id && l.variant === variant.sku)
   const discount = product.oldPrice
     ? Math.round((1 - product.price / product.oldPrice) * 100)
     : (product.discount ?? null)
 
-  const pick = (i: number) => {
-    setSel(i)
-    setAdded(false) // другой артикул — другая строка корзины, статус сбрасывается
-  }
+  const pick = (i: number) => setSel(i)
 
-  // Одна и та же кнопка стоит в панели и в липкой полосе. Остаётся рабочей
-  // после добавления: повторное нажатие увеличивает количество.
-  const cta = (className: string) => (
-    <button
-      type="button"
-      className={`btn ${className}`}
-      disabled={!variant.inStock}
-      onClick={() => {
-        add(product.id, variant.sku)
-        setAdded(true)
-      }}
-    >
-      {!variant.inStock ? t.product.unavailable : added ? t.product.added : t.product.add}
-    </button>
-  )
+  /* Одна и та же кнопка стоит в панели и в липкой полосе.
+     Добавленный товар превращает её в ссылку на корзину: надпись «в корзине»
+     сообщает состояние, и нажатие на неё должно вести туда, о чём она
+     сообщает. Раньше повторное нажатие молча добавляло вторую штуку —
+     количество меняют в самой корзине, а не вслепую отсюда. */
+  const cta = (className: string) =>
+    inCart ? (
+      <Link href={`/${lang}/cart`} className={`btn ${className}`}>
+        {t.product.added}
+      </Link>
+    ) : (
+      <button
+        type="button"
+        className={`btn ${className}`}
+        disabled={!variant.inStock}
+        onClick={() => add(product.id, variant.sku)}
+      >
+        {variant.inStock ? t.product.add : t.product.unavailable}
+      </button>
+    )
 
   return (
     <div>

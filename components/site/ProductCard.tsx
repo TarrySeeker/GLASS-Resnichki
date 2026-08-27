@@ -6,7 +6,6 @@ import { CONTENT } from '@/lib/content'
 import type { Locale } from '@/lib/i18n'
 import { inStock, type Product } from '@/lib/catalog'
 import { useStore } from '@/components/StoreProvider'
-import { useState } from 'react'
 import { PhotoBlank } from '@/components/site/PhotoBlank'
 
 /**
@@ -31,11 +30,13 @@ export function ProductCard({
   sizes?: string
 }) {
   const t = CONTENT[lang]
-  const { favorites, toggleFavorite, price, add } = useStore()
-  const [added, setAdded] = useState(false)
+  const { favorites, toggleFavorite, price, add, cart } = useStore()
   // Кладём первый доступный вариант: выбор длины и изгиба — задача карточки
   // товара, а здесь нужно быстрое действие, а не мини-конфигуратор.
   const firstInStock = product.variants.find((v) => v.inStock)
+  // Состояние берётся из корзины, а не из памяти кнопки: карточка живёт в
+  // сетке, и после перезагрузки все двадцать должны показывать правду.
+  const inCart = cart.some((l) => l.id === product.id && l.variant === firstInStock?.sku)
   const fav = favorites.includes(product.id)
   const available = inStock(product)
   // Процент считается из цен, а пока их нет — берётся из подтверждённого поля.
@@ -82,16 +83,22 @@ export function ProductCard({
             элементы ломают клавиатуру. */}
         {firstInStock ? (
           <div className="absolute inset-x-0 bottom-0 overflow-hidden">
-            <button
-              type="button"
-              className="btn quick w-full"
-              onClick={() => {
-                add(product.id, firstInStock.sku)
-                setAdded(true)
-              }}
-            >
-              {added ? t.product.added : t.actions.quickAdd}
-            </button>
+            {/* Добавленный товар превращает кнопку в ссылку на корзину:
+                надпись «в корзине» сообщает состояние, и нажатие на неё должно
+                вести туда, о чём она сообщает. */}
+            {inCart ? (
+              <Link href={`/${lang}/cart`} className="btn quick w-full">
+                {t.product.added}
+              </Link>
+            ) : (
+              <button
+                type="button"
+                className="btn quick w-full"
+                onClick={() => add(product.id, firstInStock.sku)}
+              >
+                {t.actions.quickAdd}
+              </button>
+            )}
           </div>
         ) : null}
 

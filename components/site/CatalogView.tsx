@@ -216,7 +216,7 @@ export function CatalogView({ lang }: { lang: Locale }) {
 
   const dirty = qs.length > 0
 
-  const field = 'w-full border-b border-[var(--color-rule)] bg-transparent py-2 outline-offset-4'
+  const field = 'w-full border-b border-[var(--color-rule-ink)] bg-transparent py-2 outline-offset-4'
   const box = 'h-4 w-4 shrink-0 accent-[var(--color-ink)]'
 
   const filters = (
@@ -330,7 +330,7 @@ export function CatalogView({ lang }: { lang: Locale }) {
 
   return (
     <>
-      <div className="filter-bar">
+      <div className="filter-bar on-ink">
         {/* Две строки на телефоне и одна на десктопе, без дублирования
             разметки: `sm:contents` растворяет обёртки, и четыре элемента
             становятся прямыми детьми полосы. Порядок на широком экране
@@ -353,7 +353,7 @@ export function CatalogView({ lang }: { lang: Locale }) {
                   onFocus={() => setFocused(true)}
                   onBlur={() => setTimeout(() => setFocused(false), 120)}
                   placeholder={t.nav.searchHint}
-                  className={`${field} t-nav placeholder:text-[var(--color-muted)]`}
+                  className={`${field} t-nav`}
                 />
               </label>
 
@@ -380,7 +380,7 @@ export function CatalogView({ lang }: { lang: Locale }) {
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1 sm:contents">
             <button
               type="button"
-              className="t-nav tap order-2 shrink-0 border border-[var(--color-ink)] px-3 sm:px-4"
+              className="t-nav tap order-2 shrink-0 border border-current px-3 sm:px-4"
               onClick={() => sheet.current?.showModal()}
             >
               {t.catalog.filters}
@@ -413,7 +413,7 @@ export function CatalogView({ lang }: { lang: Locale }) {
         </div>
 
         {active.length ? (
-          <div className="wrap flex flex-wrap items-center gap-2 border-t border-[var(--color-rule)] py-3">
+          <div className="wrap flex flex-wrap items-center gap-2 border-t border-[var(--color-rule-ink)] py-3">
             <span className="t-label t-muted me-2">{t.catalog.active}</span>
             {active.map((f) => (
               <button
