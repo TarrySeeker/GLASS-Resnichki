@@ -228,8 +228,21 @@ export default async function InfoPage({
                   До 1024 кадра нет: там текст идёт во всю ширину, и картинка
                   над ним отодвинула бы ответ на вопрос, ради которого сюда
                   пришли. */}
-              <div className="rise relative hidden lg:col-span-5 lg:col-start-8 lg:block">
-                <span className="absolute inset-0 flex justify-end">
+              {/* На странице бренда пустой колонки между текстом и кадром
+                  нет: они стоят вплотную, через один гутер, и читаются одним
+                  разворотом. Кадр прижат к началу своей полосы, а не к концу,
+                  — иначе он отъезжает вправо и разрыв остаётся тем же. Поля
+                  при этом сходятся: слева отступ колонки, справа ровно
+                  столько же, сколько кадр не добрал до края сетки.
+
+                  На остальных четырёх колонка между ними остаётся: там текст
+                  отвечает на вопрос, и кадр ему не пара, а соседство. */}
+              <div
+                className={`rise relative hidden lg:block ${
+                  story ? 'lg:col-span-6 lg:col-start-7' : 'lg:col-span-5 lg:col-start-8'
+                }`}
+              >
+                <span className={`absolute inset-0 flex ${story ? 'justify-start' : 'justify-end'}`}>
                   <Image
                     src={ART[slug].src}
                     alt=""
