@@ -24,6 +24,24 @@ export type InfoSlug = (typeof INFO_SLUGS)[number]
 
 const isInfoSlug = (v: string): v is InfoSlug => (INFO_SLUGS as readonly string[]).includes(v)
 
+/**
+ * Действие в конце страницы.
+ *
+ * Одинаковое «в каталог» на всех пяти было простым, но неверным: со страницы
+ * возврата человек уходит оформлять возврат, а не выбирать ресницы, и форма
+ * заявки лежит в кабинете. Остальные четыре действительно ведут к выбору —
+ * там «в каталог» и остаётся.
+ */
+type Copy = (typeof CONTENT)[Locale]
+
+const CTA: Record<InfoSlug, { href: (l: Locale) => string; label: (t: Copy) => string }> = {
+  about: { href: (l) => `/${l}/catalog`, label: (t) => t.cart.toShop },
+  contacts: { href: (l) => `/${l}/catalog`, label: (t) => t.cart.toShop },
+  delivery: { href: (l) => `/${l}/catalog`, label: (t) => t.cart.toShop },
+  privacy: { href: (l) => `/${l}/catalog`, label: (t) => t.cart.toShop },
+  returns: { href: (l) => `/${l}/account/returns`, label: (t) => t.account.returns.send },
+}
+
 /** Кадр страницы. Съёмка бренда от 15 августа, кроме «о бренде» — там модели. */
 const ART: Record<InfoSlug, { src: string; w: number; h: number }> = {
   about: { src: '/media/about.jpg', w: 1040, h: 1849 },
@@ -104,8 +122,14 @@ export default async function InfoPage({
               <div className="max-w-[36em] lg:col-span-6">
                 <p className="t-lead">{page.lead}</p>
 
+                {/* На доставке таблица идёт перед объяснением. Человек
+                    открывает эту страницу с вопросом «как приедет и почём», а
+                    не «почему устроено так»: сперва ответ, следом причины.
+                    Раньше до таблицы приходилось прочесть пять абзацев. */}
+                {slug === 'delivery' ? <DeliveryTable lang={lang} /> : null}
+
                 {'body' in page ? (
-                  <div className="mt-8 flex flex-col gap-5">
+                  <div className={`flex flex-col gap-5 ${slug === 'delivery' ? 'mt-12' : 'mt-8'}`}>
                     {page.body.map((par) => (
                       <p key={par} className="t-lead t-muted">
                         {par}
@@ -115,10 +139,12 @@ export default async function InfoPage({
                 ) : null}
 
                 {slug === 'contacts' ? <ContactList lang={lang} /> : null}
-                {slug === 'delivery' ? <DeliveryTable lang={lang} /> : null}
 
-                <Link href={`/${lang}/catalog`} className="btn btn-wide mt-10">
-                  {t.cart.toShop}
+                {/* Действие в конце — то, к которому страница ведёт, а не
+                    одинаковое «в каталог» на всех пяти. С возврата уходят
+                    оформлять возврат, с остальных — выбирать. */}
+                <Link href={CTA[slug].href(lang)} className="btn btn-wide mt-10">
+                  {CTA[slug].label(t)}
                 </Link>
               </div>
 
@@ -130,8 +156,15 @@ export default async function InfoPage({
 
                   До 1024 кадра нет: там текст идёт во всю ширину, и картинка
                   над ним отодвинула бы ответ на вопрос, ради которого сюда
-                  пришли. */}
-              <div className="tile tile-zoom rise hidden aspect-[3/4] lg:col-span-5 lg:col-start-8 lg:block">
+                  пришли.
+
+                  Высота у кадра не своя, а по колонке текста: класс tile-fill
+                  вынимает изображение из потока, и строку меряет текст. С
+                  жёстким 3:4 кадр свисал ниже текста на четыреста пикселей, а
+                  когда его просто растянули — на столько же растянулась и
+                  колонка текста, оставив пустоту под кнопкой. Нижний предел
+                  держит кадр от схлопывания там, где текста совсем мало. */}
+              <div className="tile tile-fill tile-zoom rise hidden min-h-[18rem] lg:col-span-5 lg:col-start-8 lg:block">
                 <Image
                   src={ART[slug].src}
                   alt=""
