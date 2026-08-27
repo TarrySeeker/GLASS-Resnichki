@@ -42,13 +42,21 @@ const CTA: Record<InfoSlug, { href: (l: Locale) => string; label: (t: Copy) => s
   returns: { href: (l) => `/${l}/account/returns`, label: (t) => t.account.returns.send },
 }
 
-/** Кадр страницы. Съёмка бренда от 15 августа, кроме «о бренде» — там модели. */
-const ART: Record<InfoSlug, { src: string; w: number; h: number }> = {
-  about: { src: '/media/about.jpg', w: 1040, h: 1849 },
-  contacts: { src: '/media/info-contacts.jpg', w: 1000, h: 1333 },
-  delivery: { src: '/media/info-delivery.jpg', w: 1000, h: 1333 },
-  returns: { src: '/media/info-returns.jpg', w: 1000, h: 1333 },
-  privacy: { src: '/media/info-privacy.jpg', w: 1000, h: 1333 },
+/**
+ * Кадр страницы. Съёмка бренда от 15 августа, кроме «о бренде» — там модели.
+ *
+ * Пропорция у каждого своя и выбрана по двум вещам разом: по форме самого
+ * предмета и по длине текста рядом. Коробка лежит — кадр лежачий; буклет
+ * стоит — квадрат; коробочка «подарок» совсем плоская — широкая полоса.
+ * Разница высот между колонками получается в пределах полутора сотен
+ * пикселей, и эта разница читается воздухом, а не сбоем.
+ */
+const ART: Record<InfoSlug, { src: string; w: number; h: number; box: string }> = {
+  about: { src: '/media/about.jpg', w: 1000, h: 1333, box: 'aspect-[3/4]' },
+  contacts: { src: '/media/info-contacts.jpg', w: 1200, h: 1200, box: 'aspect-square' },
+  delivery: { src: '/media/info-delivery.jpg', w: 1333, h: 1000, box: 'aspect-[4/3]' },
+  returns: { src: '/media/info-returns.jpg', w: 1333, h: 1000, box: 'aspect-[4/3]' },
+  privacy: { src: '/media/info-privacy.jpg', w: 1600, h: 900, box: 'aspect-[16/9]' },
 }
 
 export function generateStaticParams() {
@@ -119,30 +127,30 @@ export default async function InfoPage({
             <div className="mt-8 grid gap-10 lg:grid-cols-12 lg:gap-[var(--col-gap)]">
               <h1 className="t-h2 lg:col-span-12">{page.title}</h1>
 
-              {/* Первая строка идёт во всю ширину под заголовком: это не абзац
-                  текста, а подзаголовок, и колонка ему не нужна. Предел меры
-                  шире, чем у основного текста, — одна строка в 48em читается
-                  без усилия, десять уже нет. */}
-              <p className="t-lead max-w-[48em] lg:col-span-12">{page.lead}</p>
-
-              {/* Таблица — во всю ширину сетки, а не в колонку текста. В шести
-                  колонках «на оформлении, по стране назначения» ломалось на
-                  три строки, и три способа доставки читались как двенадцать
-                  строк вместо трёх. Двенадцать колонок дают каждой ячейке
-                  место в одну строку.
-
-                  Стоит она сразу под заголовком: эту страницу открывают с
-                  вопросом «как приедет и почём», а не «почему устроено так» —
-                  сперва ответ, следом причины. */}
+              {/* На доставке первая строка и таблица идут перед колонками:
+                  строка отвечает в одно предложение, таблица — по существу, и
+                  обе адресованы всем, а не левой половине страницы. На
+                  остальных четырёх строке хватает колонки текста, и растянутая
+                  на всю ширину она оставляла бы справа полосу пустоты без
+                  причины. */}
               {slug === 'delivery' ? (
-                <div className="lg:col-span-12">
-                  <DeliveryTable lang={lang} />
-                </div>
+                <>
+                  <p className="t-lead max-w-[36em] lg:col-span-12">{page.lead}</p>
+                  <div className="lg:col-span-12">
+                    <DeliveryTable lang={lang} />
+                  </div>
+                </>
               ) : null}
 
-              <div className="max-w-[36em] lg:col-span-6">
+              {/* Колонка не тянется под кадр: её высота — это её содержимое.
+                  Растянутая, она оставляла пустоту внутри себя, под кнопкой;
+                  теперь пустота остаётся снаружи, между колонкой и краем
+                  раздела, и читается воздухом, а не дырой в блоке. */}
+              <div className="max-w-[36em] lg:col-span-6 lg:self-start">
+                {slug === 'delivery' ? null : <p className="t-lead">{page.lead}</p>}
+
                 {'body' in page ? (
-                  <div className="flex flex-col gap-5">
+                  <div className={`flex flex-col gap-5 ${slug === 'delivery' ? '' : 'mt-8'}`}>
                     {page.body.map((par) => (
                       <p key={par} className="t-lead t-muted">
                         {par}
@@ -177,7 +185,9 @@ export default async function InfoPage({
                   когда его просто растянули — на столько же растянулась и
                   колонка текста, оставив пустоту под кнопкой. Нижний предел
                   держит кадр от схлопывания там, где текста совсем мало. */}
-              <div className="tile tile-fill tile-zoom rise hidden min-h-[18rem] lg:col-span-5 lg:col-start-8 lg:block">
+              <div
+                className={`tile tile-fill tile-zoom rise hidden ${ART[slug].box} lg:col-span-5 lg:col-start-8 lg:block`}
+              >
                 <Image
                   src={ART[slug].src}
                   alt=""
