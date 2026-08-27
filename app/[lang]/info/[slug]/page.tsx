@@ -100,6 +100,11 @@ export default async function InfoPage({
      рассказывает. Отсюда своя раскладка: колонка уже и отступлена на одну
      колонку от края, кадр лежачий и выровнен по середине текста. */
   const story = slug === 'about'
+  /* Кадр остался там, где ему есть что показать: бренд говорит о себе лицом,
+     политика — тем, что коробку не вскрывают. У доставки, возврата и
+     контактов текст отвечает на вопрос, и фотография коробки рядом с ответом
+     ничего к нему не прибавляла. */
+  const art = story || slug === 'privacy'
 
   return (
     <>
@@ -142,7 +147,12 @@ export default async function InfoPage({
                 <>
                   <h1 className="t-h2 lg:col-span-12">{page.title}</h1>
                   <p className="t-lead max-w-[36em] lg:col-span-12">{page.lead}</p>
-                  <div className="lg:col-span-12">
+
+                  {/* Таблица лежит на чернилах и во всю ширину окна. Это
+                      единственный ответ на странице, и плоскость отделяет его
+                      от объяснений так же, как футер отделяет служебный слой
+                      от витрины, — цветом, а не рамкой. */}
+                  <div className="band on-ink py-10 lg:col-span-12 lg:py-14">
                     <DeliveryTable lang={lang} />
                   </div>
                 </>
@@ -153,8 +163,17 @@ export default async function InfoPage({
               {/* Колонка объявлена контейнером: от её ширины считается кегль
                   заголовка на странице политики. */}
               <div
-                className={`max-w-[36em] [container-type:inline-size] lg:self-start ${
-                  story ? 'lg:col-span-5 lg:col-start-2' : 'lg:col-span-6'
+                /* Мера в 36em держится везде, даже там, где колонка шире:
+                   без кадра справа полоса разъезжается на всю сетку, и строка
+                   в восемьсот пикселей перестаёт читаться. Исключение —
+                   доставка: там текст идёт тремя столбцами, и каждый столбец
+                   свою меру держит сам. */
+                className={`[container-type:inline-size] lg:self-start ${
+                  story
+                    ? 'max-w-[36em] lg:col-span-5 lg:col-start-7'
+                    : wide
+                      ? 'lg:col-span-12'
+                      : 'max-w-[36em] lg:col-span-6'
                 }`}
               >
                 {wide ? null : (
@@ -180,9 +199,19 @@ export default async function InfoPage({
                 )}
 
                 {'body' in page ? (
-                  <div className={`flex flex-col gap-5 ${wide ? '' : 'mt-8'}`}>
+                  /* На доставке три оставшихся абзаца встают тремя столбцами:
+                     это не рассказ, который читают подряд, а три независимых
+                     уточнения к таблице, и столбиком они выглядели бы
+                     продолжением текста, которого там больше нет. */
+                  <div
+                    className={
+                      wide
+                        ? 'grid gap-8 lg:grid-cols-12 lg:gap-x-[var(--col-gap)]'
+                        : 'mt-8 flex flex-col gap-5'
+                    }
+                  >
                     {page.body.map((par) => (
-                      <p key={par} className="t-lead t-muted">
+                      <p key={par} className={`t-lead t-muted ${wide ? 'lg:col-span-4' : ''}`}>
                         {par}
                       </p>
                     ))}
@@ -228,21 +257,21 @@ export default async function InfoPage({
                   До 1024 кадра нет: там текст идёт во всю ширину, и картинка
                   над ним отодвинула бы ответ на вопрос, ради которого сюда
                   пришли. */}
-              {/* На странице бренда пустой колонки между текстом и кадром
-                  нет: они стоят вплотную, через один гутер, и читаются одним
-                  разворотом. Кадр прижат к началу своей полосы, а не к концу,
-                  — иначе он отъезжает вправо и разрыв остаётся тем же. Поля
-                  при этом сходятся: слева отступ колонки, справа ровно
-                  столько же, сколько кадр не добрал до края сетки.
+              {/* У бренда кадр стоит первым — слева, вплотную к тексту, через
+                  один гутер. Прижат он к концу своей полосы, а не к началу:
+                  прижатый к началу, он отъезжал бы влево и разрыв остался бы
+                  тем же, сколько колонок ему ни дай. Поля при этом сходятся:
+                  205 px слева до кадра и столько же справа после текста.
 
-                  На остальных четырёх колонка между ними остаётся: там текст
+                  У политики кадр справа и через пустую колонку: там текст
                   отвечает на вопрос, и кадр ему не пара, а соседство. */}
+              {art ? (
               <div
                 className={`rise relative hidden lg:block ${
-                  story ? 'lg:col-span-6 lg:col-start-7' : 'lg:col-span-5 lg:col-start-8'
+                  story ? 'lg:col-span-6 lg:col-start-1 lg:row-start-1' : 'lg:col-span-5 lg:col-start-8'
                 }`}
               >
-                <span className={`absolute inset-0 flex ${story ? 'justify-start' : 'justify-end'}`}>
+                <span className={`absolute inset-0 flex ${story ? 'justify-end' : 'justify-end'}`}>
                   <Image
                     src={ART[slug].src}
                     alt=""
@@ -256,6 +285,7 @@ export default async function InfoPage({
                   />
                 </span>
               </div>
+              ) : null}
             </div>
           </div>
         </article>
@@ -294,7 +324,7 @@ function DeliveryTable({ lang }: { lang: Locale }) {
 
       {/* Шапка таблицы только на широком экране: в карточках подпись стоит у
           каждого значения, и повторять её сверху незачем. */}
-      <div className={`t-label t-muted mt-6 hidden border-b border-[var(--color-rule)] pb-3 ${cells}`}>
+      <div className={`t-label t-muted mt-6 hidden border-b border-[var(--color-rule-ink)] pb-3 ${cells}`}>
         <span className="lg:col-span-3">{c.name}</span>
         <span className="lg:col-span-3">{c.zone}</span>
         <span className="lg:col-span-2">{c.time}</span>
@@ -305,7 +335,7 @@ function DeliveryTable({ lang }: { lang: Locale }) {
         {page.methods.map((m) => (
           <li
             key={m.name}
-            className={`border-t border-[var(--color-rule)] py-5 lg:items-baseline ${cells}`}
+            className={`border-t border-[var(--color-rule-ink)] py-5 lg:items-baseline ${cells}`}
           >
             <p className="t-nav lg:col-span-3">{m.name}</p>
 
