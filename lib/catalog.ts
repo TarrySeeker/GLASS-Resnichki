@@ -58,7 +58,9 @@
  * Поэтому в карточки товаров съёмка не пошла: положить коробку MERMAID LIGHT
  * на карточку CLASSIC или BRIDE — то же враньё, что чужая цена.
  * Использованы: макро лотка (кадр 49) и распаковка (первые 9 секунд видео) —
- * блок «Как это выглядит» на главной, где второй кадр год стоял пустым.
+ * блок «Как это выглядит» на главной, где второй кадр год стоял пустым;
+ * кадры 44, 51 и 53 — карточка MERMAID LIGHT (позиция 11), заведённая по
+ * этой съёмке по решению клиента.
  *
  * БЕЗ ФОТО ОСТАЛИСЬ ПЯТЬ ПОЗИЦИЙ:
  *   lash-remover, lash-primer, tweezers-straight — такого предмета в архиве нет;
@@ -440,6 +442,44 @@ export const PRODUCTS: Product[] = [
    * условные, цены не получены. Заменить на реальные позиции клиента или удалить.
    */
 
+  /* ─── MERMAID LIGHT ──────────────────────────────────────────────────────
+     Единственная позиция, заведённая по съёмке от 15 августа 2026, а не по
+     витрине Gold Apple. Имя стоит на упаковке рядом с логотипом — там же,
+     где у остальных линеек; окружающие надписи («PURE COMFORT WEAR», «SOFT
+     AS SILK», «МЯГКИЕ, КАК ШЁЛК», «ОТКРОЙ СВОЮ КРАСОТУ») в имя не пошли:
+     это слоганы по краям той же коробки, и они одинаковы на всех кадрах.
+
+     Длины настоящие: они напечатаны на самом лотке справа от рядов —
+     два ряда 8 мм, шесть по 10, пять по 12 и три по 14. Отсюда «микс
+     8–14 мм» в описании варианта, и отсюда же честное «—» в изгибе:
+     изгиба на упаковке нет ни на одном из пятидесяти четырёх кадров.
+
+     Артикул условный, цены нет — как у остальных позиций.                  */
+  {
+    id: 'glass-mermaid-light',
+    slug: 'mermaid-light',
+    name: {
+      ru: 'Пучковые ресницы «MERMAID LIGHT», микс 8–14 мм',
+      en: 'MERMAID LIGHT Cluster Lashes, 8–14 mm mix',
+      ar: 'رموش عناقيد «MERMAID LIGHT»، ميكس 8–14 مم',
+    },
+    summary: {
+      ru: 'Четыре длины в одном лотке',
+      en: 'Four lengths in one tray',
+      ar: 'أربعة أطوال في علبة واحدة',
+    },
+    description: NO_TEXT,
+    category: 'lashes',
+    price: 0,
+    images: [
+      '/media/catalog/mermaid-light-1.jpg',
+      '/media/catalog/mermaid-light-2.jpg',
+      '/media/catalog/mermaid-light-3.jpg',
+    ],
+    variants: [{ sku: 'GLASS-MERMAID-LIGHT', length: 'микс 8–14 мм', curl: '—', inStock: true }],
+    rank: 11,
+  },
+
   /* ─── Коллекции в закрытой упаковке ──────────────────────────────────────
      Шесть линеек, снятых брендом одинаково: коробка целиком, крышка на месте,
      карточка линейки читается. Названия взяты прямо с упаковки на кадре —
@@ -463,7 +503,7 @@ export const PRODUCTS: Product[] = [
     price: 0,
     images: ['/media/catalog/modern-bride-1.jpg'],
     variants: [{ sku: 'GLASS-MODERN-BRIDE', length: '—', curl: '—', inStock: true }],
-    rank: 11,
+    rank: 12,
   },
   {
     id: 'glass-luxurious-bride',
@@ -479,7 +519,7 @@ export const PRODUCTS: Product[] = [
     price: 0,
     images: ['/media/catalog/luxurious-bride-1.jpg'],
     variants: [{ sku: 'GLASS-LUXURIOUS-BRIDE', length: '—', curl: '—', inStock: true }],
-    rank: 12,
+    rank: 13,
   },
   {
     id: 'glass-morning-of-the-bride',
@@ -495,7 +535,7 @@ export const PRODUCTS: Product[] = [
     price: 0,
     images: ['/media/catalog/morning-of-the-bride-1.jpg'],
     variants: [{ sku: 'GLASS-MORNING-OF-THE-BRIDE', length: '—', curl: '—', inStock: true }],
-    rank: 13,
+    rank: 14,
   },
   {
     id: 'glass-celebrity-look',
@@ -511,7 +551,7 @@ export const PRODUCTS: Product[] = [
     price: 0,
     images: ['/media/catalog/celebrity-look-1.jpg'],
     variants: [{ sku: 'GLASS-CELEBRITY-LOOK', length: '—', curl: '—', inStock: true }],
-    rank: 14,
+    rank: 15,
   },
   {
     id: 'glass-caramel-glaze',
@@ -527,7 +567,7 @@ export const PRODUCTS: Product[] = [
     price: 0,
     images: ['/media/catalog/caramel-glaze-1.jpg'],
     variants: [{ sku: 'GLASS-CARAMEL-GLAZE', length: '—', curl: '—', inStock: true }],
-    rank: 15,
+    rank: 16,
   },
   {
     id: 'glass-sun-glare',
@@ -543,7 +583,7 @@ export const PRODUCTS: Product[] = [
     price: 0,
     images: ['/media/catalog/sun-glare-1.jpg'],
     variants: [{ sku: 'GLASS-SUN-GLARE', length: '—', curl: '—', inStock: true }],
-    rank: 16,
+    rank: 17,
   },
   {
     id: 'care-glue',
@@ -567,7 +607,7 @@ export const PRODUCTS: Product[] = [
     price: 0,
     images: ['/media/catalog/lash-glue-1.jpg', '/media/catalog/lash-glue-2.jpg'],
     variants: [{ sku: 'CARE-GLUE', length: '—', curl: '—', inStock: true }],
-    rank: 17,
+    rank: 18,
   },
   {
     id: 'care-remover',
@@ -591,7 +631,7 @@ export const PRODUCTS: Product[] = [
     price: 0,
     images: PLACEHOLDER,
     variants: [{ sku: 'CARE-REMOVER', length: '—', curl: '—', inStock: true }],
-    rank: 18,
+    rank: 19,
   },
   {
     id: 'care-primer',
@@ -615,7 +655,7 @@ export const PRODUCTS: Product[] = [
     price: 0,
     images: PLACEHOLDER,
     variants: [{ sku: 'CARE-PRIMER', length: '—', curl: '—', inStock: true }],
-    rank: 19,
+    rank: 20,
   },
   {
     id: 'tool-tweezers-curved',
@@ -639,7 +679,7 @@ export const PRODUCTS: Product[] = [
     price: 0,
     images: ['/media/catalog/tweezers-curved-1.jpg'],
     variants: [{ sku: 'TOOL-TWZ-C', length: '—', curl: '—', inStock: true }],
-    rank: 20,
+    rank: 21,
   },
   {
     id: 'tool-tweezers-straight',
@@ -663,7 +703,7 @@ export const PRODUCTS: Product[] = [
     price: 0,
     images: PLACEHOLDER,
     variants: [{ sku: 'TOOL-TWZ-S', length: '—', curl: '—', inStock: true }],
-    rank: 21,
+    rank: 22,
   },
 ]
 
