@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { BLANKS, BRAND, CONTENT, MAKER } from '@/lib/content'
@@ -90,6 +91,25 @@ export default async function InfoPage({
                   глаз перестаёт находить начало следующей. Раньше это делал
                   общий предел ширины .wrap — он снят, потому что ломал сетку
                   страницы, а ограничивать надо не полосу, а текст. */}
+              {/* Пять колонок слева от текста пустовали на всех пяти
+                  служебных страницах. На четырёх это правильно: условия
+                  возврата и политику читают, а не разглядывают. На странице
+                  бренда — нет: это единственный текст на сайте, который
+                  рассказывает, кто это, и рядом с ним должно стоять лицо.
+                  Кадр вертикальный и в четыре колонки: он держит левый край
+                  сетки и не спорит с колонкой текста за внимание. */}
+              {slug === 'about' ? (
+                <div className="tile tile-zoom rise hidden aspect-[9/16] lg:col-span-4 lg:block">
+                  <Image
+                    src="/media/about.jpg"
+                    alt=""
+                    width={1040}
+                    height={1849}
+                    sizes="(max-width: 1024px) 1px, 30vw"
+                  />
+                </div>
+              ) : null}
+
               <div className="max-w-[36em] lg:col-span-7 lg:col-start-6">
                 <p className="t-lead">{page.lead}</p>
 
