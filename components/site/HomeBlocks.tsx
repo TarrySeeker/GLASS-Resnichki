@@ -151,17 +151,24 @@ export function LooksBlock({ lang }: { lang: Locale }) {
 }
 
 /* ─── 04. Как это выглядит ─────────────────────────────────────────────────
-   По структуре: упаковка → пучки → лицо → образ. Съёмки на моделях в архиве
-   бренда нет ни одного кадра — все 257 фотографий предметные. Поэтому здесь
-   четыре слота с подписями, а не подставленная предметка. */
+   По структуре: упаковка → пучки → лицо → образ.
+
+   Все четыре кадра — съёмка бренда. Последним закрылся второй: макро самих
+   пучков не было ни в архиве, ни в первой съёмке, и на его месте больше года
+   стояла честная пустая рамка. Кадр пришёл со съёмкой от 15 августа.
+
+   Упаковка — не фотография, а распаковка: коробку открывают, и это ровно то,
+   что подпись и обещает. Девять секунд из сорока двух исходных — ровно до
+   того места, где ролик уходит в лотки: они уже стоят соседним кадром, и
+   повторять их значит рассказывать одно дважды. */
 /**
- * Ролики последовательности «как это выглядит», по номеру шага.
- * Пропуск означает, что съёмки этого шага у бренда нет, и на его месте
- * честно стоит пустая рамка.
+ * Содержимое шагов «как это выглядит», по номеру шага. У шага либо ролик,
+ * либо фотография; пропуск означал бы, что съёмки этого шага у бренда нет, и
+ * на его месте вставала бы пустая рамка.
  */
-const CLIPS: (undefined | { src: string; poster: string })[] = [
+const SHOTS: (undefined | { src: string; poster: string } | { photo: string })[] = [
   { src: '/media/lash-tray.mp4', poster: '/media/lash-tray-poster.jpg' },
-  undefined,
+  { photo: '/media/lash-macro.jpg' },
   { src: '/media/face-clip.mp4', poster: '/media/face-clip-poster.jpg' },
   { src: '/media/look-clip.mp4', poster: '/media/look-clip-poster.jpg' },
 ]
@@ -177,9 +184,6 @@ export function RealLifeBlock({ lang }: { lang: Locale }) {
           <p className="t-label t-muted max-w-sm">{t.blocks.realNote}</p>
         </div>
 
-        {/* Три шага из четырёх — съёмка бренда, а не заглушки: палетка в
-            свете, нанесение крупным планом и готовый образ. Пустым остался
-            один кадр: макро самих пучков в архиве нет. */}
         {/* Лента фокусируема: внутри карточек нет ссылок, и без tabindex с
             клавиатуры её нечем прокрутить — видны были бы две карточки из
             четырёх. Имя берём у заголовка блока, чтобы остановка в обходе
@@ -190,12 +194,22 @@ export function RealLifeBlock({ lang }: { lang: Locale }) {
           className="mrail rail-cards mt-10 sm:grid sm:grid-cols-2 sm:gap-6 lg:grid-cols-4"
         >
           {t.blocks.realSteps.map((step, i) => {
-            const clip = CLIPS[i]
+            const shot = SHOTS[i]
             return (
               <li key={step}>
                 <div className="aspect-[3/4]">
-                  {clip ? (
-                    <Clip src={clip.src} poster={clip.poster} label={step} />
+                  {shot && 'src' in shot ? (
+                    <Clip src={shot.src} poster={shot.poster} label={step} />
+                  ) : shot ? (
+                    <span className="tile rise block h-full">
+                      <Image
+                        src={shot.photo}
+                        alt=""
+                        width={1080}
+                        height={1440}
+                        sizes="(max-width: 640px) 60vw, (max-width: 1024px) 50vw, 23vw"
+                      />
+                    </span>
                   ) : (
                     <Slot label={step} className="h-full" />
                   )}

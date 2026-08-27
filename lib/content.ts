@@ -380,7 +380,7 @@ const ru: Dict = {
       { name: 'VOLUME', effect: 'Плотный, заметный', spec: '20D · лента и микс' },
     ],
     realTitle: 'Как это выглядит',
-    realNote: 'Три кадра из четырёх — съёмка бренда. Пустым остался один: пучок крупным планом.',
+    realNote: 'Четыре кадра съёмки бренда: коробка, пучки, нанесение, готовый образ.',
     realSteps: ['Упаковка', 'Пучки', 'Лицо', 'Образ'],
     whyTitle: 'Почему эти ресницы',
     why: [
@@ -720,7 +720,7 @@ const en: Dict = {
       { name: 'VOLUME', effect: 'Dense, unmistakable', spec: '20D · strip and mix' },
     ],
     realTitle: 'How it looks',
-    realNote: 'Three of four frames are the brand’s own footage. One is still empty: clusters up close.',
+    realNote: 'Four frames of the brand’s own footage: the box, the clusters, the application, the finished look.',
     realSteps: ['Box', 'Clusters', 'Face', 'Look'],
     whyTitle: 'Why these lashes',
     why: [
@@ -1059,7 +1059,7 @@ const ar: Dict = {
       { name: 'VOLUME', effect: 'كثيفة وواضحة', spec: '20D · شريط وميكس' },
     ],
     realTitle: 'كيف تبدو',
-    realNote: 'ثلاث لقطات من أربع من تصوير العلامة. واحدة ما زالت فارغة: الخصلات عن قرب.',
+    realNote: 'أربع لقطات من تصوير العلامة: العلبة والخصلات والتطبيق والإطلالة النهائية.',
     realSteps: ['العلبة', 'العناقيد', 'الوجه', 'الإطلالة'],
     whyTitle: 'لماذا هذه الرموش',
     why: [
