@@ -9,6 +9,7 @@ import { Switchers } from '@/components/site/Switchers'
 import { PromoBar } from '@/components/site/PromoBar'
 import { CartCount } from '@/components/site/CartCount'
 import { FavCount } from '@/components/site/FavCount'
+import { IconBag, IconHeart } from '@/components/site/Icon'
 import { SearchPanel } from '@/components/site/SearchPanel'
 import { SignIn } from '@/components/site/SignIn'
 import { PRODUCTS } from '@/lib/catalog'
@@ -168,34 +169,37 @@ export function Header({ lang }: { lang: Locale }) {
           </div>
         </nav>
 
-        <div className="t-nav ms-auto flex items-center gap-5">
-          {/* Язык и валюта прячутся до 1280: они же стоят в футере и в
-              мобильном меню, а в строке шапки занимают 110 px, которые нужнее
-              избранному. */}
-          <div className="hidden xl:block">
+        {/* Правый угол — знаками. Словами он стоил 250 px, и из-за них
+            избранное пряталось до 640, а язык с валютой — до 1280. Знаки
+            возвращают на место и то и другое, а слова остаются в мобильном
+            меню, где на них есть место. */}
+        <div className="t-nav ms-auto flex items-center gap-1 sm:gap-2">
+          <div className="hidden lg:block">
             <Switchers lang={lang} compact fields={['lang', 'currency']} />
           </div>
-          {/* Настоящий поиск по сайту вместо ссылки на каталог. */}
+          {/* Настоящий поиск по сайту вместо ссылки на каталог. На телефоне
+              его в шапке нет: он стоит первой строкой в самом меню. */}
           <span className="hidden sm:inline-flex">
             <SearchPanel lang={lang} />
           </span>
-          {/* Кабинет открывается панелью входа: на телефоне он в меню, здесь
-              его прячем до 1024, иначе в строке шапки не остаётся места. */}
-          <span className="hidden lg:inline-flex">
+
+          {/* Кабинет открывается панелью входа: на телефоне он в меню. */}
+          <span className="hidden sm:inline-flex">
             <SignIn lang={lang} />
           </span>
+
           {/* Сердце на карточке складывало товар в хранилище с самого начала,
               но открыть отложенное было негде. Вход стоит рядом с корзиной:
               это два одинаковых по смыслу списка, и ищут их в одном месте. */}
-          <Link
-            href={`/${lang}/favorites`}
-            className="lnk tap hidden whitespace-nowrap sm:inline-flex"
-          >
-            {t.nav.favorites}
+          <Link href={`/${lang}/favorites`} className="lnk tap tap-icon whitespace-nowrap">
+            <IconHeart />
+            <span className="sr-only">{t.nav.favorites}</span>
             <FavCount />
           </Link>
-          <Link href={`/${lang}/cart`} className="lnk tap whitespace-nowrap">
-            {t.nav.cart}
+
+          <Link href={`/${lang}/cart`} className="lnk tap tap-icon whitespace-nowrap">
+            <IconBag />
+            <span className="sr-only">{t.nav.cart}</span>
             <span className="ms-1">
               <CartCount />
             </span>
@@ -206,7 +210,7 @@ export function Header({ lang }: { lang: Locale }) {
       {open ? (
         <nav id="mobile-nav" className="wrap border-t border-[var(--color-rule)] py-4 lg:hidden">
           <div className="border-b border-[var(--color-rule)] pb-3">
-            <SearchPanel lang={lang} />
+            <SearchPanel lang={lang} label />
           </div>
           <ul className="t-h3 flex flex-col">
             {links.map((l) => (
@@ -230,7 +234,7 @@ export function Header({ lang }: { lang: Locale }) {
           </ul>
 
           <div className="t-nav flex items-center gap-6 border-y border-[var(--color-rule)] py-4">
-            <SignIn lang={lang} />
+            <SignIn lang={lang} label />
             <Link
               href={`/${lang}/favorites`}
               className="lnk tap"
@@ -249,3 +253,4 @@ export function Header({ lang }: { lang: Locale }) {
     </>
   )
 }
+

@@ -5,6 +5,7 @@ import { AnchorLink } from '@/components/site/AnchorLink'
 import { Switchers } from '@/components/site/Switchers'
 import { Subscribe } from '@/components/site/Subscribe'
 import { PromoCode } from '@/components/site/PromoCode'
+import { IconArrowUp, IconInstagram } from '@/components/site/Icon'
 
 /**
  * Футер. Инверсный — это единственная чёрная плоскость на сайте, она закрывает
@@ -146,8 +147,11 @@ export function Footer({ lang }: { lang: Locale }) {
             </nav>
           ))}
 
-          {/* Соцсети текстом, а не значком: во всём футере нет ни одной
-              иконки, и логотип чужой площадки читался бы заплаткой. */}
+          {/* Знак и слово вместе. Официальный логотип площадки сюда не
+              ставится: он цветной, залитый и нарисован чужой рукой — на чёрном
+              футере это заплатка. Здесь та же геометрия, набранная нашей
+              линией, а слово рядом остаётся: знак узнают, но имя площадки
+              называет только оно. */}
           <nav
             className="min-w-0 max-sm:border-t max-sm:border-[var(--color-rule-ink)] max-sm:pt-4 lg:col-span-3"
             aria-label={t.footer.social}
@@ -160,8 +164,9 @@ export function Footer({ lang }: { lang: Locale }) {
                     href={s.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="lnk tap t-nav"
+                    className="lnk tap t-nav inline-flex items-center gap-2"
                   >
+                    <IconInstagram size={16} />
                     {s.name}
                   </a>
                 </li>
@@ -180,7 +185,14 @@ export function Footer({ lang }: { lang: Locale }) {
             <Switchers lang={lang} inline />
           </div>
 
-          <AnchorLink href="#top" targetId="top" className="lnk tap t-nav">
+          {/* Стрелка целиком, а не одна галочка: она обещает путь наверх, а
+              не шаг. Тот же рисунок, что у кнопки возврата к началу списка. */}
+          <AnchorLink
+            href="#top"
+            targetId="top"
+            className="lnk tap t-nav inline-flex items-center gap-2"
+          >
+            <IconArrowUp size={14} />
             {t.footer.toTop}
           </AnchorLink>
         </div>

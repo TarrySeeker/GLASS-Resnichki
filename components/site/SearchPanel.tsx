@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { CONTENT } from '@/lib/content'
+import { IconSearch } from '@/components/site/Icon'
 import type { Locale } from '@/lib/i18n'
 import { searchProducts } from '@/lib/search'
 import { SuggestRow } from '@/components/site/SuggestRow'
@@ -27,7 +28,7 @@ import { SuggestRow } from '@/components/site/SuggestRow'
 const LIMIT = 6
 const LIST_ID = 'search-suggest'
 
-export function SearchPanel({ lang }: { lang: Locale }) {
+export function SearchPanel({ lang, label = false }: { lang: Locale; label?: boolean }) {
   const t = CONTENT[lang]
   const router = useRouter()
   const dlg = useRef<HTMLDialogElement>(null)
@@ -82,14 +83,17 @@ export function SearchPanel({ lang }: { lang: Locale }) {
       <button
         ref={trigger}
         type="button"
-        className="t-nav tap"
+        className="t-nav tap tap-icon"
         aria-haspopup="dialog"
         onClick={() => {
           dlg.current?.showModal()
           field.current?.focus()
         }}
       >
-        {t.nav.search}
+        {/* В строке шапки — знак, в мобильном меню — слово: там на него есть
+            место, и список из одних значков читался бы ребусом. */}
+        {label ? t.nav.search : <IconSearch />}
+        {label ? null : <span className="sr-only">{t.nav.search}</span>}
       </button>
 
       <dialog

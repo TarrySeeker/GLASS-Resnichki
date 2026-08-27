@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useRef, useState } from 'react'
 import { CONTENT } from '@/lib/content'
+import { IconAccount } from '@/components/site/Icon'
 import type { Locale } from '@/lib/i18n'
 
 /**
@@ -22,7 +23,7 @@ import type { Locale } from '@/lib/i18n'
  * что он ещё не подключён, говорит первая строка самого кабинета. Отдельная
  * надпись здесь только удваивала бы то же самое сообщение.
  */
-export function SignIn({ lang }: { lang: Locale }) {
+export function SignIn({ lang, label = false }: { lang: Locale; label?: boolean }) {
   const t = CONTENT[lang]
   const a = t.account
   const router = useRouter()
@@ -34,12 +35,12 @@ export function SignIn({ lang }: { lang: Locale }) {
       <button
         type="button"
         /* t-nav повторяется здесь, а не берётся от полосы шапки: у кнопки
-           text-transform от предка не наследуется, и «Кабинет» стоял строчными
-           между ПОИСК и КОРЗИНОЙ. */
-        className="lnk tap t-nav whitespace-nowrap"
+           text-transform от предка не наследуется. */
+        className="lnk tap tap-icon t-nav whitespace-nowrap"
         onClick={() => ref.current?.showModal()}
       >
-        {a.title}
+        {label ? a.title : <IconAccount />}
+        {label ? null : <span className="sr-only">{a.title}</span>}
       </button>
 
       <dialog
