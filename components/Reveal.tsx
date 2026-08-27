@@ -71,8 +71,9 @@ export function Reveal() {
       )
     }
 
-    /* Строка: включаем движение только пока она в кадре. Отдельный
-       наблюдатель, потому что этот не отписывается после первого срабатывания. */
+    /* Бесконечные движения — бегущая строка и наезд на кадре — идут, только
+       пока элемент в кадре. Отдельный наблюдатель, потому что этот не
+       отписывается после первого срабатывания. */
     let loop: IntersectionObserver | undefined
     if ('IntersectionObserver' in window) {
       loop = new IntersectionObserver(
@@ -116,7 +117,9 @@ export function Reveal() {
       document
         .querySelectorAll<HTMLElement>('.rise:not([data-shown])')
         .forEach((el) => prep?.observe(el))
-      document.querySelectorAll<HTMLElement>('.marquee').forEach((el) => loop?.observe(el))
+      document
+        .querySelectorAll<HTMLElement>('.marquee, .drift')
+        .forEach((el) => loop?.observe(el))
     }
 
     scan()

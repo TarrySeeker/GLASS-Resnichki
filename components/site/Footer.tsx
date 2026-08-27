@@ -119,10 +119,10 @@ export function Footer({ lang }: { lang: Locale }) {
                   что почти никому не нужно. Свёрнутые группы дают три строки,
                   а нужную открывают одним касанием.
 
-                  С 1024 раскрытие отменяется правилом .fold: содержимое
+                  С 1024 раскрытие отменяется классом .fold-static: содержимое
                   показывается всегда, стрелка убирается, и колонка выглядит
                   ровно как раньше. Разметка одна на оба случая. */}
-              <details className="fold">
+              <details className="fold fold-static">
                 <summary className="t-label t-muted">{col.title}</summary>
                 <ul className="pt-2">
                   {col.items.map((i) => (

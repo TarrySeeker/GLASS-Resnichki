@@ -201,7 +201,7 @@ export function RealLifeBlock({ lang }: { lang: Locale }) {
                   {shot && 'src' in shot ? (
                     <Clip src={shot.src} poster={shot.poster} label={step} />
                   ) : shot ? (
-                    <span className="tile rise block h-full">
+                    <span className="tile drift rise block h-full">
                       <Image
                         src={shot.photo}
                         alt=""
